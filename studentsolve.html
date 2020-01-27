@@ -1,0 +1,304 @@
+<html>
+  <head>
+    <title>Simple login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
+
+  </head>
+  <script>
+
+      var numRows;
+      var numCol;
+      var tblArr = [];
+
+      function loadQuestion(){
+        var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://3.17.16.206:3000/loadQuestion",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var textByLine = this.responseText.split("\n")
+                    if(textByLine[0] === 'true'){
+                        document.getElementById('pre').innerHTML = textByLine[1];
+                        document.getElementById('post').innerHTML = textByLine[2];
+                        numRows = parseInt(textByLine[3].substring(3));
+                        numCol = parseInt(textByLine[4].substring(3));
+                        appendRow(numRows-1,'sampleTable')
+                        appendCol(numCol-1,'sampleTable')
+                        tblArr = textByLine[7].split(',')
+                        var count=0;
+
+                        // var temp = ''
+                        // for(i=9;i<17;i++){
+                        //     temp+=textByLine[i]
+                        // }
+
+                        editor.setValue(textByLine[9] + '\n\n\n\n\n\n}')
+
+                        // document.getElementById('heading').innerHTML = tblArr;
+
+
+                        //FINISH COMPILING WITH PARAMS
+                        //IMPLEMENT PYTHON?
+                        //START TRACKING
+                        //USE BRENDENS NAV BAR
+                        // for(x=0;x<tblArr.length;x++){
+                            var tbl = document.getElementById('sampleTable')
+                            for(i=0;i<tbl.rows.length;i++){
+                                var objCells = tbl.rows.item(i).cells;
+                                for (var j = 0; j < objCells.length; j++) {
+                                    objCells.item(j).innerHTML = tblArr[count]
+                                    count++;
+                                }
+                            }
+                        // }
+
+                        
+                    }
+                    else{
+                        document.getElementById('pre').innerHTML = textByLine[0];
+                        document.getElementById('post').innerHTML = textByLine[1];
+                        document.getElementById('output').innerHTML = textByLine[2];
+                        document.getElementById('sampleTable').style.visibility = 'hidden'
+                    }
+                    
+                }
+            };
+            console.log(xhr.send(JSON.stringify({
+                name:localStorage.getItem("assignment")
+            })));
+
+      }
+
+      function appendRow(numRows,table) {
+
+            for(j=0;j<numRows;j++){
+                var tbl = document.getElementById(table), // table reference
+                    row = tbl.insertRow(tbl.rows.length),      // append table row
+                    i;
+                // insert table cells to the new row
+                for (i = 0; i < tbl.rows[0].cells.length; i++) {
+                    createCell(row.insertCell(i), i, 'row');
+                }
+            }
+        }
+
+        function appendCol(numRows,table) {
+            for (j=0;j<numRows;j++){
+                var tbl = document.getElementById(table), // table reference
+                    i;
+                // open loop for each row and append cell
+                for (i = 0; i < tbl.rows.length; i++) {
+                    createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
+                }
+            }
+        }
+
+        function createCell(cell, text, style) {
+            var div = document.createElement('div'), // create DIV element
+                txt = document.createTextNode(text); // create text node
+            div.appendChild(txt);                    // append text node to the DIV
+            div.setAttribute('class', style);        // set DIV class attribute
+            div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+            cell.appendChild(div);
+            cell.setAttribute('contenteditable', true)                   // append DIV to the table cell
+        }
+
+        function getTableData(row,col,table) {
+            var tbl = document.getElementById(table);      
+            var objCells = tbl.rows.item(row).cells;
+            var value = objCells.item(col).innerHTML;
+            return value;
+        
+        }
+
+        function changeTableData(val,row,col,table){
+            var tbl = document.getElementById(table);
+            var objCells = tbl.rows.item(row).cells;
+            objCells.item(col).innerHTML = val
+        }
+
+      function getCode(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://3.17.16.206:3000/getCode",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    editor.setValue(this.responseText)
+                }
+            };
+            console.log(xhr.send(JSON.stringify({
+                name:localStorage.getItem("signedIn"),
+                aName:localStorage.getItem('assignment')
+            })));
+      }
+
+      function isHidden(el) {
+          return (el.offsetParent === null)
+        }
+
+      function compileCode(){
+        var codeText = editor.getValue();
+        if(isHidden(document.getElementById('sampleTable'))){
+            var xhr = new XMLHttpRequest();
+            var o = document.getElementById('output').textContent;
+            var temp = o.substring(8)
+            xhr.open("POST", "http://3.17.16.206:3000/compileCode",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // alert(this.responseText)
+                    if(this.responseText == 'correct'){
+                        alert("correct")
+                    }
+                    else if (this.responseText == 'wrong'){
+                        alert("incorrect")
+                    }
+                    else{
+                        alert("something aint workin")
+                    }
+                }
+            };
+            console.log(xhr.send(JSON.stringify({
+                code:codeText,
+                output: temp,
+                aName: localStorage.getItem("assignment"),
+                name: localStorage.getItem("signedIn")
+            })));
+        }
+        else{
+            var xhr = new XMLHttpRequest();
+            var o = document.getElementById('output').textContent;
+            var temp = o.substring(8)
+            xhr.open("POST", "http://3.17.16.206:3000/compileCodeParams",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // alert(this.responseText)
+                    if(this.responseText == 'correct'){
+                        alert("correct")
+                    }
+                    else if (this.responseText == 'wrong'){
+                        alert("incorrect")
+                    }
+                    else{
+                        alert("something aint workin")
+                    }
+                }
+            };
+            console.log(xhr.send(JSON.stringify({
+                code:codeText,
+                output: temp,
+                aName: localStorage.getItem("assignment"),
+                name: localStorage.getItem("signedIn")
+            })));
+        }
+    }
+        
+        
+      
+  
+  </script>
+    <style type="text/css" media="screen">
+        #heading {
+            text-align: center;
+        }
+        .container{
+            text-align: left;
+            
+        }
+        .x{
+            display: inline-block;
+        }
+        #container{
+            height: 400px;
+            width: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+        #editor { 
+            height:  400px;
+            min-height: 50vh;
+            width: 700px;
+            display: inline-block;
+        }
+        #paramP{
+            visibility: hidden;
+        }
+        #numParams{
+            visibility: hidden;
+        }
+        #paramBtn{
+            visibility: hidden;
+        }
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 40%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        
+        
+    
+    </style>
+  </head>
+  <body onload="loadQuestion()">
+    <h1 id='heading'>Assignment</h1>
+    
+
+    <!-- <div class='container'>
+        <h2 class="x">Assignment Name: </h2>
+        <h4 class = 'x' id="name"></h4>
+    </div> -->
+
+    <div class='container'>
+        <!-- <h2 class="x">Directions: </h2> -->
+        <h4 class = 'x' id="pre"></h4>
+    </div>
+
+    <div class='container'>
+        <!-- <h2 class="x">Sample Data:   </h2> -->
+        <h4 class = 'x' id="post"></h4>
+    </div>
+
+    <div class='container'>
+        <!-- <h2 class="x">Sample Output:   </h2> -->
+        <h4 class = 'x' id="output"></h4>
+    </div>
+
+    <div class='container'>
+        <h2 class="x">Example Input/Output:   </h2>
+        <table class ='x' id="sampleTable">
+            <tr id="empable"><td><div>test</div>
+        </table>
+
+    </div>
+
+    <br>
+    <br>
+
+    <div id='container'>
+        <div id='editor'>function myFunction(){
+    
+}
+        </div>
+    </div>
+
+    <br>
+
+    <button onclick="compileCode()">Compile Code</button>
+
+    <script>
+        var editor = ace.edit('editor');
+        editor.setTheme("ace/theme/dracula");
+        editor.session.setMode("ace/mode/javascript");
+    </script>
+  </body>
+</html>

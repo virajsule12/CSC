@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Simple login</title>
+  </head>
+  <script>
+      function loadAssignments(){
+            var assignmentArr=[];
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://3.17.16.206:3000/loadAssignments",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    assignmentArr = this.responseText.split(',');
+                    for(i=0;i<assignmentArr.length;i++){
+                    var node = document.createElement("LI");
+                    var textnode = document.createTextNode(assignmentArr[i]);
+                    localStorage.setItem('assignment', assignmentArr[i])
+                    node.setAttribute('onClick','nextPage()')
+                    node.appendChild(textnode);
+                    document.getElementById("list").appendChild(node);
+            }
+
+                }
+            };
+            console.log(xhr.send(JSON.stringify({
+                name: localStorage.getItem('signedIn')
+            })));
+      }
+
+      function nextPage(val){
+        window.location.href = "studentsolve.html";  
+      }
+  </script>
+  <body onload="loadAssignments()">
+    <h1>Assignments:</h1>
+    <ul  id='list' style="list-style-type:disc;">
+    </ul>
+
+  </body>
+</html>

@@ -1,0 +1,406 @@
+<html>
+  <head>
+    <title>Simple login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        
+        var defaultVal=''
+
+        function setDefault(){
+            defaultVal = editor.getValue();
+        }
+        
+        function getTableData(row,col,table) {
+            var tbl = document.getElementById(table);      
+            var objCells = tbl.rows.item(row).cells;
+            var value = objCells.item(col).innerHTML;
+            return value;
+        
+        }
+
+        function changeTableData(val,row,col,table){
+            var tbl = document.getElementById(table);
+            var objCells = tbl.rows.item(row).cells;
+            objCells.item(col).innerHTML = val
+        }
+
+        function clearTable(table){
+            var tbl = document.getElementById(table);
+            for (i = 0; i < tbl.rows.length; i++) {
+                var objCells = tbl.rows.item(i).cells;
+                for (var j = 0; j < objCells.length; j++) {
+                    objCells.item(j).innerHTML = ""
+                }
+            }
+        }
+        
+        function setEditable(table){
+            var tbl = document.getElementById(table);
+            for (i = 0; i < tbl.rows.length; i++) {
+                var objCells = tbl.rows.item(i).cells;
+                for (var j = 1; j < objCells.length; j++) {
+                    objCells.item(j).setAttribute("contenteditable", true)
+                }
+            }
+            for (i = 0; i < tbl.rows.length; i++) {
+                var objCells = tbl.rows.item(i).cells;
+                objCells.item(0).setAttribute("contenteditable",false);
+            }
+        }
+
+        function appendRow(numRows,table) {
+
+            for(j=0;j<numRows;j++){
+                var tbl = document.getElementById(table), // table reference
+                    row = tbl.insertRow(tbl.rows.length),      // append table row
+                    i;
+                // insert table cells to the new row
+                for (i = 0; i < tbl.rows[0].cells.length; i++) {
+                    createCell(row.insertCell(i), i, 'row');
+                }
+            }
+        }
+
+        function appendCol(numRows,table) {
+            for (j=0;j<numRows;j++){
+                var tbl = document.getElementById(table), // table reference
+                    i;
+                // open loop for each row and append cell
+                for (i = 0; i < tbl.rows.length; i++) {
+                    createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
+                }
+            }
+        }
+
+        function createCell(cell, text, style) {
+            var div = document.createElement('div'), // create DIV element
+                txt = document.createTextNode(text); // create text node
+            div.appendChild(txt);                    // append text node to the DIV
+            div.setAttribute('class', style);        // set DIV class attribute
+            div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+            cell.appendChild(div);
+            cell.setAttribute('contenteditable', true)                   // append DIV to the table cell
+        }
+
+        // function makeTable(vars,points) {
+        //     for (i = 0; i < points; i++) {
+        //         var row = document.getElementById("empable");
+        //         var x = row.insertCell(0);
+        //         x.innerHTML = "New cell";
+        //         var row = document.getElementById("empable1");
+        //         var x = row.insertCell(0);
+        //         x.innerHTML = "New cell";
+        //     }
+        //     // var row = document.getElementById("empable");
+        //     // var x = row.insertCell(0);
+        //     // x.innerHTML = "New cell";
+        //     // var row = document.getElementById("empable1");
+        //     // var x = row.insertCell(0);
+        //     // x.innerHTML = "New cell";
+        //     // function appendRow() {
+        //     for(i =0;i<1;i++) {
+        //         var tbl = document.getElementById('empTable'), // table reference
+        //             row = tbl.insertRow(tbl.rows.length),      // append table row
+        //             i;
+        //         // insert table cells to the new row
+        //         for (i = 0; i < tbl.rows[0].cells.length; i++) {
+        //             createCell(row.insertCell(i), i, 'row');
+        //         }
+        //     }
+        // }  
+
+        var paramArr = [];
+        
+
+        function addParams(){
+            var params='('
+            for(i=0;i<paramArr.length-1;i++){
+                params+= paramArr[i] + ',';
+            }
+            params+= paramArr[paramArr.length-1]
+            
+            editor.find('(')
+            editor.replace(params)
+        }
+
+        function showParams(){
+            var val = document.getElementById('paramsCheck').value;
+            if(val === 'Yes'){
+                document.getElementById('paramP').style.visibility = 'visible'
+                document.getElementById('numParams').style.visibility = 'visible'
+                document.getElementById('preC').style.visibility = 'visible'
+                document.getElementById('paramBtn').style.visibility = 'visible'
+                document.getElementById('testTable').style.visibility = 'visible'
+                document.getElementById('sampleTable').style.visibility = 'visible'
+                document.getElementById('sampleOutput').style.visibility = 'hidden'
+            }
+            else{
+                editor.setValue(defaultVal);
+                document.getElementById('paramP').style.visibility = 'hidden'
+                document.getElementById('numParams').style.visibility = 'hidden'
+                document.getElementById('paramBtn').style.visibility = 'hidden'
+                document.getElementById('preC').style.visibility = 'hidden'
+                document.getElementById('testTable').style.visibility = 'hidden'
+                document.getElementById('sampleTable').style.visibility = 'hidden'
+                document.getElementById('sampleOutput').style.visibility = 'visible'
+            }
+        }
+
+        function askForParams(){
+            paramArr = [];
+            var count = document.getElementById('numParams').value;
+            appendRow(count-1,"sampleTable");
+            appendRow(count-1,"testTable");
+            clearTable('sampleTable');
+            clearTable('testTable');
+            setEditable('sampleTable')
+            setEditable('testTable')
+            for(i=1;i<parseInt(count)+1;i++){
+                var temp = prompt("Name of Parameter " + i + ":");
+                paramArr.push(temp);
+                changeTableData(temp,i-1,0,'sampleTable');
+                changeTableData(temp,i-1,0,'testTable');
+            }
+            changeTableData("Output",count,0,"sampleTable");
+            changeTableData("Output",count,0,"testTable");
+
+            
+            addParams();
+        }
+
+        function postAssignment(){
+            var n = document.getElementById('name').value
+            var pre = document.getElementById('preC').value
+            var post = document.getElementById('postC').value
+            var sampleO = document.getElementById('sampleOutput').value
+            var c = editor.getValue()
+            var params='';
+
+            var sampleT='';
+            var testT= '';
+
+            var sT = document.getElementById('sampleTable');
+            var tT = document.getElementById('testTable');
+
+            var sTrows = sT.rows.length;
+            var sTcols = sT.rows.item(0).cells.length;
+            var tTrows = tT.rows.length;
+            var tTcols = tT.rows.item(0).cells.length;
+
+            for(i=0;i<sT.rows.length;i++){
+                var objCells = sT.rows.item(i).cells;
+                for (var j = 0; j < objCells.length; j++) {
+                    sampleT = sampleT + objCells.item(j).textContent + ','
+                }
+            }
+            sampleT = sampleT.substring(0, sampleT.length-1)
+            
+
+            for(i=0;i<tT.rows.length;i++){
+                var objCells = tT.rows.item(i).cells;
+                for (var j = 1; j < objCells.length; j++) {
+                    testT = testT + objCells.item(j).textContent + ','
+                }
+            }
+
+            testT = testT.substring(0, testT.length-1)
+
+            for(i=0;i<paramArr.length-1;i++){
+                params+= paramArr[i] + ","
+            }
+            params += paramArr[paramArr.length-1]
+            if(document.getElementById('paramsCheck').value === 'Yes'){
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://3.17.16.206:3000/postParam",true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                console.log(xhr.send(JSON.stringify({
+                    name: n,
+                    preCondition: pre,
+                    postCondition: post,
+                    sampleTable: sampleT,
+                    testTable: testT,
+                    code:c,
+                    arr: params,
+                    sTR:sTrows,
+                    sTC:sTcols,
+                    tTR:tTrows,
+                    tTC:tTcols,
+                    teacher:localStorage.getItem('signedIn')
+                })));
+            }
+            else{
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://3.17.16.206:3000/postNoParam",true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                console.log(xhr.send(JSON.stringify({
+                    name: n,
+                    preCondition: pre,
+                    postCondition: post,
+                    sampleOutput: sampleO,
+                    code: c,
+                    teacher:localStorage.getItem('signedIn')
+                })));
+                }
+        }
+    
+    </script>
+    <style type="text/css" media="screen">
+        #heading {
+            text-align: center;
+        }
+        .container{
+            text-align: left;
+            
+        }
+        .x{
+            display: inline-block;
+        }
+        #container{
+            height: 400px;
+            width: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+        #editor { 
+            height:  400px;
+            min-height: 50vh;
+            width: 700px;
+            display: inline-block;
+        }
+        #paramP{
+            visibility: hidden;
+        }
+        #numParams{
+            visibility: hidden;
+        }
+        #paramBtn{
+            visibility: hidden;
+        }
+        #sampleTable{
+            visibility: hidden;
+        }
+        #testTable{
+            visibility: hidden;
+        }
+        #preC{
+            visibility: hidden;
+        }
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 40%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+                
+        
+    
+    </style>
+  </head>
+  <body onload="setDefault()">
+    <h1 id="heading">Post Assignment</h1>
+    <!-- <table>
+        <tr><td><div contenteditable>I'm editable</div></td>
+        <td><div contenteditable>I'm also editable</div></td></tr>
+    </table> -->
+    
+
+    <div class='container'>
+        <h2 class="x">Assignment Name: </h2>
+        <input class='x' type="TEXT" id="name" size="100">
+    </div>
+
+    <div class='container'>
+        <h2 class="x">Precondition: </h2>
+        <input class='x ' type="TEXT" id="preC" size="100">
+    </div>
+
+    <div class='container'>
+        <h2 class="x">Postcondition: </h2>
+        <input class='x ' type="TEXT" id="postC" size="100">
+    </div>
+
+    <div class='container'>
+        <h2 class="x">Output:</h2>
+        <input class='x' type="TEXT" id="sampleOutput" size="100">
+    </div>
+
+    <div class='container'>
+        <h2 class="x">Example Input/Output:   </h2>
+        <table class ='x' id="sampleTable">
+            <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
+            <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
+        </table>
+        <button onclick="appendCol(1,'sampleTable')">Add Instance</button>
+    </div>
+
+    <!-- <div class='container'>
+        <h2 class="x">Sample Output (Students Will See This):   </h2>
+        <input class='x' type="TEXT" id="sampleOutput" size="100">
+    </div> -->
+
+    <div class='container'>
+        <h2 class="x">Test Input/Output:   </h2>
+        <table class ='x' id="testTable" hidden>
+            <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
+            <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
+        </table>
+        <button onclick="appendCol(1,'testTable')">Add Instance</button>
+    </div>
+
+    <!-- <div class='container'>
+        <h2 class="x">Test Output (Students Will Not See This):   </h2>
+        <input class='x' type="TEXT" id="testOutput" size="100">
+    </div> -->
+
+    <div class='container'>
+        <h2 class="x">Parameters: </h2>
+        <select onchange='showParams()' id='paramsCheck'>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+        </select>
+        <p id='paramP' class="x" hidden>Number of Parameters: </p>
+        <input class='x' type="TEXT" id="numParams" size="3" value="1">
+        <button id ='paramBtn' class="x" onclick="askForParams()">Name Parameters</button>
+    </div>
+
+
+    <br>
+    <select onchange="changeLang()" id='langSelect'>
+        <option value="Javascript">Javascript</option>
+        <option value="Python">Python</option>
+    </select>
+
+    <br>
+    <br>
+
+    <div id='container'>
+        <div id='editor'>function myFunction(){
+    
+
+
+
+}
+        </div>
+    </div>
+
+    <br>
+
+    <button onclick="postAssignment()">Post Assignment</button>
+
+    <script>
+        var editor = ace.edit('editor');
+        editor.setTheme("ace/theme/dracula");
+        editor.session.setMode("ace/mode/javascript");
+        editor.setReadOnly(true);
+    </script>
+    
+  </body>
+</html>
