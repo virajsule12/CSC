@@ -1,0 +1,441 @@
+<html>
+  <head>
+    <title>Welcome</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    
+
+    <script>
+    var colors = new Array(
+  [62,35,255],
+  [60,255,60],
+  [255,35,98],
+  [45,175,230],
+  [255,0,255],
+  [255,128,0]);
+
+var step = 0;
+//color table indices for: 
+// current color left
+// next color left
+// current color right
+// next color right
+var colorIndices = [0,1,2,3];
+
+//transition speed
+var gradientSpeed = 0.002;
+
+function updateGradient()
+{
+  
+  if ( $===undefined ) return;
+  
+var c0_0 = colors[colorIndices[0]];
+var c0_1 = colors[colorIndices[1]];
+var c1_0 = colors[colorIndices[2]];
+var c1_1 = colors[colorIndices[3]];
+
+var istep = 1 - step;
+var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+var color1 = "rgb("+r1+","+g1+","+b1+")";
+
+var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+var color2 = "rgb("+r2+","+g2+","+b2+")";
+
+ $('#gradient').css({
+   background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color1+"))"}).css({
+    background: "-moz-linear-gradient(left, "+color1+" 0%, "+color1+" 100%)"});
+  
+  step += gradientSpeed;
+  if ( step >= 1 )
+  {
+    step %= 1;
+    colorIndices[0] = colorIndices[1];
+    colorIndices[2] = colorIndices[3];
+    
+    //pick two new target color indices
+    //do not pick the same as the current one
+    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    
+  }
+}
+
+function clickedStudent(){
+  window.location.href = "http://virajsule.me/studentsolve.html";
+  
+}
+
+function clickedTeacher(){
+  window.location.href = "http://virajsule.me/teacherpost.html";
+
+}
+
+setInterval(updateGradient,10);</script>
+
+<style type="text/css" media="screen">
+
+h1 {
+  /* text-align: center; */
+  /* font-family: 'Times New Roman', Times, serif; */
+}
+
+h2 {
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  color: rgb(42, 53, 158); 
+  font-size: 50px;
+  transform: translate(-50%, -50%);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.typewriter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 25px;
+}
+
+.typewriter h1 {
+  color: #fff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .1em solid white; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(30, end),
+    blink-caret .5s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 70%}
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  20% { border-color: white }
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 13px;
+}
+.container {
+  position: relative;
+  background: #f1f1f1;
+  margin: 40px auto;
+  width: 80%;
+  height: 360px;
+  z-index: 100;
+  opacity: .8;
+  
+}
+.left-bg, .right-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transition: .25s ease;
+}
+.left-bg {
+  background-color:rgb(112,241,135);
+  left: 0;
+  opacity: .90;
+}
+.right-bg {
+  background-color:rgb(68,153,243);
+  background-position: right;
+  right: 0;
+}
+.right-bg:before {
+  content: "OR";
+  font-weight: bold;
+  position: absolute;
+  background: white;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 15px;
+  top: 150px;
+  left: 0;
+  -webkit-transform: translate(-50%, -50%);
+}
+.right-bg:after {
+  content: " ";
+  height: 280px;
+  width: 1px;
+  background-color: white;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+}
+.right-bg:after {
+  right: 0;
+}
+.left-bg:hover {
+  width: 60%;
+}
+.left-bg:hover + .right-bg {
+  width: 40%;
+}
+.right-bg:hover {
+  width: 60%;
+}
+.right-bg:hover + .left-bg {
+  width: 40%;
+}
+
+   
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    font-family: 'Exo', sans-serif;
+}
+
+
+.context {
+    width: 100%;
+    position: absolute;
+    /* top:50vh; */
+    
+}
+
+.context h1{
+    text-align: center;
+    color: #fff;
+    font-size: 70px;
+    padding-top: 20px;
+}
+
+
+.area{
+    background: rgb(119, 6, 134);  
+    background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
+    width: 100%;
+    height:100vh;
+    
+   
+}
+
+.circles{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+    
+}
+
+.circles li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.circles li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.circles li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+}
+
+/* #title {
+  font-family: 'Open Sans', sans-serif;
+  color: rgb(153, 50, 50);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 150px;
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1;
+  text-shadow: #EDEDED 3px 2px 0;
+  position: relative;
+  z-index: 100;
+}
+#title:after {
+  content:"COMPSCI CLASSROOM!";
+  position: absolute;
+  left: 8px;
+  top: 32px;
+}
+#title:after {
+  /*background: url(https://subtlepatterns.com/patterns/crossed_stripes.png) repeat;*/
+  /* background-image: -webkit-linear-gradient(left top, transparent 0%, transparent 25%, #555 25%, #555 50%, transparent 50%, transparent 75%, #555 75%);
+  background-size: 4px 4px;
+  -webkit-background-clip: text;
+  /* -webkit-text-fill-color: transparent;
+  z-index: -5;
+  display: block;
+  text-shadow: none;
+} */ 
+
+</style>
+  </head>
+  <body>
+    <!-- <image id='cortez' src="resources/cortez.png"></image> -->
+
+      
+      <!-- <div id="gradient"></div> -->
+      
+      <!-- <div class="container">
+          <div class="left-bg" id="studentClick" onclick="clickedStudent()">
+          </div>
+          <div class="right-bg" id="teacherClick" onclick="clickedTeacher()">
+          </div>
+        </div> -->
+
+        <div class="context">
+          <div class="typewriter">
+              <h1 id="title">CompSci Classroom.</h1>
+
+          </div>
+          <div class="container">
+            <div class="left-bg" id="studentClick" onclick="clickedStudent()">
+              <h2 class="heading">Student</h2>
+            
+            </div>
+            <div class="right-bg" id="teacherClick" onclick="clickedTeacher()">
+              <h2 class="heading">Teacher</h2>
+            </div>
+          </div>
+      </div>
+  
+  
+  <div class="area" >
+              <ul class="circles">
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+              </ul>
+      </div >
+    <!-- <a href="something" class="button7" style="background-color:#00ffcc">
+     <span style="font-size:3em; font-family:'Comic Sans MS'; border-right:1px solid rgba(0,0,0); padding-right:0.3em; margin-right:0.3em; vertical-align:middle">J</span>
+     Login with hyour SJWhub account
+    </a>
+     -->
+
+
+
+
+    
+    
+  </body>
+</html>
