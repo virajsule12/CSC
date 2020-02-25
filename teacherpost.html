@@ -263,8 +263,8 @@
             position: relative;
         }
         #editor { 
-            height:  400px;
-            min-height: 50vh;
+            height:  10vh;
+            /* min-height: 50vh; */
             width: 700px;
             display: inline-block;
         }
@@ -384,9 +384,6 @@
     <div id='container'>
         <div id='editor'>function myFunction(){
     
-
-
-
 }
         </div>
     </div>
@@ -398,8 +395,10 @@
     <script>
         var editor = ace.edit('editor');
         editor.setTheme("ace/theme/dracula");
-        editor.session.setMode("ace/mode/javascript");
+        editor.session.setMode("ace/mode/javascript");        
         // editor.setReadOnly(true);
+        // editor.row(1).setReadOnly(false);
+        editor.setReadOnly(false);
     </script>
     
   </body>
