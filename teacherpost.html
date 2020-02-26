@@ -147,24 +147,38 @@
         }
 
         function askForParams(){
-            paramArr = [];
+            // paramArr = [];
             var count = document.getElementById('numParams').value;
-            appendRow(count-1,"sampleTable");
-            appendRow(count-1,"testTable");
-            clearTable('sampleTable');
-            clearTable('testTable');
-            setEditable('sampleTable')
-            setEditable('testTable')
-            for(i=1;i<parseInt(count)+1;i++){
-                var temp = prompt("Name of Parameter " + i + ":");
-                paramArr.push(temp);
-                changeTableData(temp,i-1,0,'sampleTable');
-                changeTableData(temp,i-1,0,'testTable');
-            }
-            changeTableData("Output",count,0,"sampleTable");
-            changeTableData("Output",count,0,"testTable");
+            // appendRow(count-1,"sampleTable");
+            // appendRow(count-1,"testTable");
+            // clearTable('sampleTable');
+            // clearTable('testTable');
+            // setEditable('sampleTable')
+            // setEditable('testTable')
+            // for(i=1;i<parseInt(count)+1;i++){
+            //     var temp = prompt("Name of Parameter " + i + ":");
+            //     paramArr.push(temp);
+            //     changeTableData(temp,i-1,0,'sampleTable');
+            //     changeTableData(temp,i-1,0,'testTable');
+            // }
+            // changeTableData("Output",count,0,"sampleTable");
+            // changeTableData("Output",count,0,"testTable");
 
-            
+            appendCol(count,"paramNames")
+            // for(i=1;i<document.getElementById("paramNames").rows.length;i++){
+            //     paramArr.push(i,0,"paramNames")
+            // }
+            // addParams();
+        }
+
+        function insParam(){
+            // console.log(document.getElementById("paramNames").rows[0])
+            for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
+                paramArr.push(document.getElementById("paramNames").rows[0].children[i].innerText)
+                console.log(i)
+            }
+            // paramArr.push(getTableData(0,1,"paramNames"))
+            alert(paramArr)
             addParams();
         }
 
@@ -375,6 +389,7 @@
         <table id="paramNames">
             <tr id="empable"><td><div>Parameter  Names:</div>
         </table>
+        <button onclick="insParam()">Test</button>
     </div>
 
 
