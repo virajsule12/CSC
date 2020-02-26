@@ -269,13 +269,13 @@
             display: inline-block;
         }
         #paramP{
-            visibility: hidden;
+            /* visibility: hidden; */
         }
         #numParams{
-            visibility: hidden;
+            /* visibility: hidden; */
         }
         #paramBtn{
-            visibility: hidden;
+            /* visibility: hidden; */
         }
         #sampleTable{
             visibility: hidden;
@@ -285,6 +285,9 @@
         }
         #preC{
             visibility: hidden;
+        }
+        #paramNames{
+            width: fit-content;
         }
         table {
         font-family: arial, sans-serif;
@@ -362,13 +365,16 @@
 
     <div class='container'>
         <h2 class="x">Parameters: </h2>
-        <select onchange='showParams()' id='paramsCheck'>
+        <!-- <select onchange='showParams()' id='paramsCheck'>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
-        </select>
+        </select> -->
         <p id='paramP' class="x" hidden>Number of Parameters: </p>
-        <input class='x' type="TEXT" id="numParams" size="3" value="1">
+        <input class='x' type="TEXT" id="numParams" size="3" value="0">
         <button id ='paramBtn' class="x" onclick="askForParams()">Name Parameters</button>
+        <table id="paramNames">
+            <tr id="empable"><td><div>Parameter  Names:</div>
+        </table>
     </div>
 
 
@@ -389,6 +395,15 @@
     </div>
 
     <br>
+
+    <!-- <div id='container'>
+        <div id='editor1'>function myFunction(){
+    
+}
+        </div>
+    </div>
+
+    <br> -->
 
     <button onclick="postAssignment()">Post Assignment</button>
 
