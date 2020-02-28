@@ -172,13 +172,22 @@
         }
 
         function insParam(){
-            // console.log(document.getElementById("paramNames").rows[0])
-            for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
+            if(document.getElementById("paramNames").rows[0].children.length == 1){
+                paramArr.push("")
+            }
+            else{
+                for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
                 paramArr.push(document.getElementById("paramNames").rows[0].children[i].innerText)
                 console.log(i)
+                }
             }
+            // console.log(document.getElementById("paramNames").rows[0])
+            // for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
+            //     paramArr.push(document.getElementById("paramNames").rows[0].children[i].innerText)
+            //     console.log(i)
+            // }
             // paramArr.push(getTableData(0,1,"paramNames"))
-            alert(paramArr)
+            
             addParams();
         }
 
@@ -277,7 +286,7 @@
             position: relative;
         }
         #editor { 
-            height:  10vh;
+            height:  30vh;
             /* min-height: 50vh; */
             width: 700px;
             display: inline-block;
@@ -389,11 +398,11 @@
         <table id="paramNames">
             <tr id="empable"><td><div>Parameter  Names:</div>
         </table>
-        <button onclick="insParam()">Test</button>
     </div>
 
 
     <br>
+    <button onclick="insParam()">Initialize Program</button>
     <select onchange="changeLang()" id='langSelect'>
         <option value="Javascript">Javascript</option>
         <option value="Python">Python</option>
@@ -405,6 +414,11 @@
     <div id='container'>
         <div id='editor'>function myFunction(){
     
+
+
+
+
+
 }
         </div>
     </div>
