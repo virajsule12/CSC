@@ -214,6 +214,36 @@
             addParams();
         }
 
+        function compileCode(){
+        var codeText = editor.getValue();
+        
+            var xhr = new XMLHttpRequest();
+            // var o = document.getElementById('output').textContent;
+            // var temp = o.substring(8)
+            xhr.open("POST", "http://virajsule.me:3000/compileCode",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("output").innerHTML = this.responseText
+                    // alert(this.responseText)
+                    // if(this.responseText == 'correct'){
+                    //     alert("correct")
+                    // }
+                    // else if (this.responseText == 'wrong'){
+                    //     alert("incorrect")
+                    // }
+                    // else{
+                    //     alert("something aint workin")
+                    // }
+                }
+            };
+
+            console.log(xhr.send(JSON.stringify({
+                code:codeText
+            })));
+        
+    }
+
         function postAssignment(){
             var n = document.getElementById('name').value
             var pre = document.getElementById('preC').value
@@ -459,7 +489,7 @@
         <div class="form-group">
             <p>Execute: </p>
             <span id="functionName">myFunction(</span>
-            <input class="form-field" type="text" placeholder="Insert Parameters">
+            <input  id="execute" class="form-field" type="text" placeholder="Insert Parameters">
             <span>)</span>
         </div>
     </div>
@@ -475,6 +505,10 @@
 
     <br> -->
 
+    <button onclick="compileCode()">Post Assignment</button>
+    <br>
+    <p id="output">Output:</p>
+    <br>
     <button onclick="postAssignment()">Post Assignment</button>
 
     <script>
