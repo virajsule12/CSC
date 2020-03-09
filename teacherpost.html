@@ -216,11 +216,12 @@
 
         function compileCode(){
         var codeText = editor.getValue();
+        var callF = "console.log(myFunction("+ document.getElementById('execute') + "));" 
         
             var xhr = new XMLHttpRequest();
             // var o = document.getElementById('output').textContent;
             // var temp = o.substring(8)
-            xhr.open("POST", "http://virajsule.me:3000/compileCode",true);
+            xhr.open("POST", "http://virajsule.me:3000/execTeacherCode",true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -239,7 +240,8 @@
             };
 
             console.log(xhr.send(JSON.stringify({
-                code:codeText
+                code:codeText,
+                functionCall: callF
             })));
         
     }
