@@ -79,35 +79,8 @@
             div.setAttribute('class', style);        // set DIV class attribute
             div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
             cell.appendChild(div);
-            cell.setAttribute('contenteditable', true)                   // append DIV to the table cell
+            cell.setAttribute('contenteditable', true)// append DIV to the table cell
         }
-
-        // function makeTable(vars,points) {
-        //     for (i = 0; i < points; i++) {
-        //         var row = document.getElementById("empable");
-        //         var x = row.insertCell(0);
-        //         x.innerHTML = "New cell";
-        //         var row = document.getElementById("empable1");
-        //         var x = row.insertCell(0);
-        //         x.innerHTML = "New cell";
-        //     }
-        //     // var row = document.getElementById("empable");
-        //     // var x = row.insertCell(0);
-        //     // x.innerHTML = "New cell";
-        //     // var row = document.getElementById("empable1");
-        //     // var x = row.insertCell(0);
-        //     // x.innerHTML = "New cell";
-        //     // function appendRow() {
-        //     for(i =0;i<1;i++) {
-        //         var tbl = document.getElementById('empTable'), // table reference
-        //             row = tbl.insertRow(tbl.rows.length),      // append table row
-        //             i;
-        //         // insert table cells to the new row
-        //         for (i = 0; i < tbl.rows[0].cells.length; i++) {
-        //             createCell(row.insertCell(i), i, 'row');
-        //         }
-        //     }
-        // }  
 
         var paramArr = [];
         
@@ -147,95 +120,63 @@
         }
 
         function askForParams(){
-            // paramArr = [];
             var count = document.getElementById('numParams').value;
-            // appendRow(count-1,"sampleTable");
-            // appendRow(count-1,"testTable");
-            // clearTable('sampleTable');
-            // clearTable('testTable');
-            // setEditable('sampleTable')
-            // setEditable('testTable')
-            // for(i=1;i<parseInt(count)+1;i++){
-            //     var temp = prompt("Name of Parameter " + i + ":");
-            //     paramArr.push(temp);
-            //     changeTableData(temp,i-1,0,'sampleTable');
-            //     changeTableData(temp,i-1,0,'testTable');
-            // }
-            // changeTableData("Output",count,0,"sampleTable");
-            // changeTableData("Output",count,0,"testTable");
-
-            appendCol(count,"paramNames")
             if (count>0){
-                for(i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
-                    // for(j=0;j<document.getElementById("paramNames").rows.length;j++)
-                        document.getElementById("paramNames").rows[0].children[i].innerText = ""
-                        var btn = document.createElement("Select");
-                        btn.innerHTML = "CLICK ME";
-                        document.getElementById("types").appendChild(btn);
-                        var option1 = document.createElement("option");
-                        option1.text = "String";
-                        var option2 = document.createElement("option");
-                        option2.text = "Number";
-                        var option3 = document.createElement("option");
-                        option3.text = "Array";
-                        btn.add(option1);
-                        btn.add(option2);
-                        btn.add(option3);
+                for(i=0;i<count;i++){  
+                    //adding top cell for param name
+                    var nameCell = document.getElementById('names').insertCell(-1);
+                    let newText = document.createTextNode("");
+                    nameCell.appendChild(newText);
+                    nameCell.contentEditable="true"                        
+                    
+                    
+                    //adding bottom cell for param type
+                    var dropdown = document.createElement('Select');
+                    dropdown.type = "button";
+                    dropdown.className = "btn";
+                    dropdown.value = "test";
+                    var newCell = document.getElementById('types').insertCell(-1);
+                    newCell.appendChild(dropdown);
+                    var option1 = document.createElement("option");
+                    option1.text = "String";
+                    var option2 = document.createElement("option");
+                    option2.text = "Number";
+                    var option3 = document.createElement("option");
+                    option3.text = "Array";
+                    dropdown.add(option1);
+                    dropdown.add(option2);
+                    dropdown.add(option3);
+
+
                 }
-            }
-
-            // var btn = document.createElement("Select");
-            // btn.innerHTML = "CLICK ME";
-            // document.getElementById("paramTypes").rows[0].appendChild(btn);
-
-            // for(i=1;i<document.getElementById("paramNames").rows.length;i++){
-            //     paramArr.push(i,0,"paramNames")
-            // }
-            // addParams();
+            } 
         }
 
+        //inserts parameters from table into code editor
         function insParam(){
-            if(document.getElementById("paramNames").rows[0].children.length == 1){
+            if(document.getElementById("params").rows[0].children.length == 1){
                 paramArr.push("")
             }
             else{
-                for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
-                paramArr.push(document.getElementById("paramNames").rows[0].children[i].innerText)
+                for(let i=1;i<document.getElementById("params").rows[0].children.length;i++){
+                paramArr.push(document.getElementById("params").rows[0].children[i].innerText)
                 console.log(i)
                 }
-            }
-            // console.log(document.getElementById("paramNames").rows[0])
-            // for(let i=1;i<document.getElementById("paramNames").rows[0].children.length;i++){
-            //     paramArr.push(document.getElementById("paramNames").rows[0].children[i].innerText)
-            //     console.log(i)
-            // }
-            // paramArr.push(getTableData(0,1,"paramNames"))
-            
+            }         
             addParams();
         }
 
+        //compiles code from editor and returns output
         function compileCode(){
         var codeText = editor.getValue();
         var callF = "console.log(myFunction(" + document.getElementById("execute").value + "));" 
         var xhr = new XMLHttpRequest();
-        // var o = document.getElementById('output').textContent;
-        // var temp = o.substring(8)
         xhr.open("POST", "http://virajsule.me:3000/execTeacherCode",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = "json"
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("output").innerHTML = this.response.result;
-                // alert(this.responseText)
-                // if(this.responseText == 'correct'){
-                //     alert("correct")
-                // }
-                // else if (this.responseText == 'wrong'){
-                //     alert("incorrect")
-                // }
-                // else{
-                //     alert("something aint workin")
-                // }
             }
         };
 
@@ -449,20 +390,17 @@
 
     <div class='container'>
         <h2 class="x">Parameters: </h2>
-        <!-- <select onchange='showParams()' id='paramsCheck'>
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-        </select> -->
         <p id='paramP' class="x" hidden>Number of Parameters: </p>
         <input class='x' type="TEXT" id="numParams" size="3" value="0">
         <button id ='paramBtn' class="x" onclick="askForParams()">Name Parameters</button>
-        <table id="paramNames" class="tables">
+        <table id="params" class="tables">
             <tr id="names"><td><div>Parameter  Names:</div>
-        </table>
-
-        <table id="paramTypes" class="tables">
             <tr id="types"><td><div>Parameter  Types:</div>
         </table>
+
+        <!-- <table id="paramTypes" class="tables">
+            <tr id="types"><td><div>Parameter  Types:</div>
+        </table> -->
     </div>
 
 
@@ -497,15 +435,6 @@
     </div>
 
     <br>
-
-    <!-- <div id='container'>
-        <div id='editor1'>function myFunction(){
-    
-}
-        </div>
-    </div>
-
-    <br> -->
 
     <button onclick="compileCode()">Compile</button>
     <br>
