@@ -187,6 +187,20 @@
         
     }
 
+        function iotoex(){
+            if(document.getElementById("exampleTable").rows[0])
+            appendCol("1","exampleTable")
+            document.getElementById("exampleTable").style.visibility="visible"
+        }
+
+        function iototest(){
+
+        }
+
+        function iotoboth(){
+
+        }
+
         function postAssignment(){
             var n = document.getElementById('name').value
             var pre = document.getElementById('preC').value
@@ -289,15 +303,15 @@
             width: 700px;
             display: inline-block;
         }
-        #sampleTable{
+        /* #exampleTable{
             visibility: hidden;
         }
         #testTable{
             visibility: hidden;
-        }
-        #preC{
+        } */
+        /* #preC{
             visibility: hidden;
-        }
+        } */
         .tables{
             width: fit-content;
             color: #4ABDAC;
@@ -315,17 +329,54 @@
             text-align: left;
             padding: 8px;
         }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #F7B733;
+        }
 
-  
+        li {
+            float: left;
+        }
 
-       
+        li a {
+            display: block;
+            color: #4ABDAC;
+            font-weight: bold;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
 
-                
-        
+        li a:hover {
+            background-color: rgb(70, 63, 3);
+        } 
+
+        .iobtn {
+            visibility: visible;
+        }  
+
+        .left-element {
+            display: inline-block;
+            float: left;
+        }
+
+        .right-element {
+            display: inline-block;
+            
+        }  
     
     </style>
   </head>
   <body onload="setDefault()" bgcolor = "#4ABDAC">
+    <ul>
+        <li><a class="active" href="#home">Classes</a></li>
+        <li><a href="#news">Post Assignment</a></li>
+        <li><a href="#contact">Create Class</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
     <h1 id="heading">Post Assignment</h1>
     <!-- <table>
         <tr><td><div contenteditable>I'm editable</div></td>
@@ -348,19 +399,31 @@
         <input class='x ' type="TEXT" id="postC" size="100">
     </div>
 
-    <div class='container'>
+    <!-- <div class='container'>
         <h2 class="x">Output:</h2>
         <input class='x' type="TEXT" id="sampleOutput" size="100">
-    </div>
+    </div> -->
 
     <div class='container'>
-        <h2 class="x">Example Input/Output:   </h2>
-        <table class ='x' id="sampleTable">
-            <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
-            <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
-        </table>
-        <button onclick="appendCol(1,'sampleTable')">Add Instance</button>
+        <div class="left-element">
+            <h2 class="x">Example Input/Output:   </h2>
+        </div>
+
+        <div class="right-element">
+            <table class ='tables' id="exampleTable">
+                <tr id="exIn"><td><div>Input:</div>
+                <tr id="exOut"><td><div></div>Output:</div>
+            </table>
+            <br>
+            <button onclick="appendCol(1,'exampleTable')">Add Instance</button>
+        </div>
+        
+        
     </div>
+    <br>
+    <br>
+    <br>
+
 
     <!-- <div class='container'>
         <h2 class="x">Sample Output (Students Will See This):   </h2>
@@ -368,12 +431,16 @@
     </div> -->
 
     <div class='container'>
-        <h2 class="x">Test Input/Output:   </h2>
-        <table class ='x' id="testTable" hidden>
-            <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
-            <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
-        </table>
-        <button onclick="appendCol(1,'testTable')">Add Instance</button>
+        <div class="left-element">
+            <h2 class="x">Test Input/Output:   </h2>
+        </div>
+        <div class="right-element">
+            <table class ='x' id="testTable" hidden>
+                <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
+                <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
+            </table>
+            <button onclick="appendCol(1,'testTable')">Add Instance</button>
+        </div>
     </div>
 
     <!-- <div class='container'>
@@ -424,15 +491,22 @@
             <span id="functionName">myFunction(</span>
             <input  id="execute" class="form-field" type="text" placeholder="Insert Parameters">
             <span>)</span>
+            <button onclick="compileCode()">Compile</button>
+            <br>
+            <p id="output">Output:</p>
+            <button class="iobtn" id="iotoex" onclick="iotoex()">Add Input/Output to Example Table</button>
+            <button class="iobtn" id="iototest" onclick="iototest()">Add Input/Output to Test Table</button>
+            <button class="iobtn" id="iotoboth" onclick="iotoboth()">Add Input/Output to Both Tables</button>
         </div>
     </div>
+    
 
     <br>
 
-    <button onclick="compileCode()">Compile</button>
+    <!-- <button onclick="compileCode()">Compile</button>
     <br>
     <p id="output">Output:</p>
-    <br>
+    <br> -->
     <button onclick="postAssignment()">Post Assignment</button>
 
     <script>
