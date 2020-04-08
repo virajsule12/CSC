@@ -61,14 +61,23 @@
             }
         }
 
-        function appendCol(numRows,table) {
-            for (j=0;j<numRows;j++){
-                var tbl = document.getElementById(table), // table reference
-                    i;
-                // open loop for each row and append cell
-                for (i = 0; i < tbl.rows.length; i++) {
-                    createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
-                }
+        // function appendCol(numRows,table) {
+        //     for (j=0;j<numRows;j++){
+        //         var tbl = document.getElementById(table), // table reference
+        //             i;
+        //         // open loop for each row and append cell
+        //         for (i = 0; i < tbl.rows.length; i++) {
+        //             createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
+        //         }
+        //     }
+        // }
+
+        function appendCol(numRows, table, text){
+            for(i=0;i<=numRows;i++){
+                var cell = document.getElementById(table).rows[i].insertCell(-1);
+                let newText = document.createTextNode(text);
+                cell.appendChild(newText);
+                cell.contentEditable="true" 
             }
         }
 
@@ -187,18 +196,45 @@
         
     }
 
-        function iotoex(){
-            if(document.getElementById("exampleTable").rows[0])
-            appendCol("1","exampleTable")
-            document.getElementById("exampleTable").style.visibility="visible"
-        }
 
-        function iototest(){
+        function iotoTables(tableNames){
+            var input = document.getElementById("execute").value
+            var output = document.getElementById("output").innerText
+            
 
-        }
+            if(tableNames.length==2){
+                var ecell = document.getElementById("exampleTable").rows[0].insertCell(-1);
+                let enewText = document.createTextNode(input);
+                ecell.appendChild(enewText);
+                ecell.contentEditable="true" 
 
-        function iotoboth(){
+                var eocell = document.getElementById("exampleTable").rows[1].insertCell(-1);
+                let eonewText = document.createTextNode(output);
+                eocell.appendChild(eonewText);
+                eocell.contentEditable="true";
 
+                var tcell = document.getElementById("testTable").rows[0].insertCell(-1);
+                let tnewText = document.createTextNode(input);
+                tcell.appendChild(tnewText);
+                tcell.contentEditable="true" 
+
+                var tocell = document.getElementById("testTable").rows[1].insertCell(-1);
+                let tonewText = document.createTextNode(output);
+                tocell.appendChild(tonewText);
+                tocell.contentEditable="true"  
+            }
+            else{
+                var cell = document.getElementById(tableNames[0]).rows[0].insertCell(-1);
+                let newText = document.createTextNode(input);
+                cell.appendChild(newText);
+                cell.contentEditable="true" 
+
+                var ocell = document.getElementById(tableNames[0]).rows[1].insertCell(-1);
+                let onewText = document.createTextNode(output);
+                ocell.appendChild(onewText);
+                ocell.contentEditable="true" 
+                // appendCol("1",tableNames[0],arr)
+            }
         }
 
         function postAssignment(){
@@ -415,7 +451,7 @@
                 <tr id="exOut"><td><div></div>Output:</div>
             </table>
             <br>
-            <button onclick="appendCol(1,'exampleTable')">Add Instance</button>
+            <button onclick="appendCol(1,'exampleTable','')">Add Instance</button>
         </div>
         
         
@@ -435,11 +471,12 @@
             <h2 class="x">Test Input/Output:   </h2>
         </div>
         <div class="right-element">
-            <table class ='x' id="testTable" hidden>
-                <tr id="empable"><td><div>Param 1</div><td><div contenteditable>I'm editable</div></td>
-                <tr id="empable1"><td><div>Output</div><td><div contenteditable>I'm editable</div></td>
+            <table class ='tables' id="testTable" >
+                <tr id="testIn"><td><div>Input:</div>
+                <tr id="testOut"><td><div></div>Output:</div>
             </table>
-            <button onclick="appendCol(1,'testTable')">Add Instance</button>
+            <br>
+            <button onclick="appendCol(1,'testTable','')">Add Instance</button>
         </div>
     </div>
 
@@ -450,7 +487,7 @@
 
     <div class='container'>
         <h2 class="x">Parameters: </h2>
-        <p id='paramP' class="x" hidden>Number of Parameters: </p>
+        <p id='paramP' class="x">Number of Parameters: </p>
         <input class='x' type="TEXT" id="numParams" size="3" value="0">
         <button id ='paramBtn' class="x" onclick="askForParams()">Name Parameters</button>
         <table id="params" class="tables">
@@ -494,9 +531,9 @@
             <button onclick="compileCode()">Compile</button>
             <br>
             <p id="output">Output:</p>
-            <button class="iobtn" id="iotoex" onclick="iotoex()">Add Input/Output to Example Table</button>
-            <button class="iobtn" id="iototest" onclick="iototest()">Add Input/Output to Test Table</button>
-            <button class="iobtn" id="iotoboth" onclick="iotoboth()">Add Input/Output to Both Tables</button>
+            <button class="iobtn" id="iotoex" onclick="iotoTables(['exampleTable'])">Add Input/Output to Example Table</button>
+            <button class="iobtn" id="iototest" onclick="iotoTables(['testTable'])">Add Input/Output to Test Table</button>
+            <button class="iobtn" id="iotoboth" onclick="iotoTables(['exampleTable','testTable'])">Add Input/Output to Both Tables</button>
         </div>
     </div>
     
