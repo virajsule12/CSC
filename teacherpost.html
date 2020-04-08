@@ -241,43 +241,55 @@
             var n = document.getElementById('name').value
             var pre = document.getElementById('preC').value
             var post = document.getElementById('postC').value
-            var sampleO = document.getElementById('sampleOutput').value
+            var exIn =[]
+            var exOut=[]
+            var testIn=[]
+            var testOut=[]
+            var numP = document.getElementById('numParams').innerText
+            var pNames=[]
+            var pTypes=[]
+            var language = document.getElementById('langSelect').value;
             var c = editor.getValue()
-            var params='';
 
-            var sampleT='';
-            var testT= '';
+            for(i=1;i<document.getElementById("exampleTable").rows[0].length;i++){
+                exIn.push(document.getElementById('exIn').cells[i].innerText)
+                exOut.push(document.getElementById('exOut').cells[i].innerText)
+            }
 
-            var sT = document.getElementById('sampleTable');
-            var tT = document.getElementById('testTable');
+            for(i=1;i<document.getElementById("testTable").rows[0].length;i++){
+                testIn.push(document.getElementById('testIn').cells[i].innerText)
+                testOut.push(document.getElementById('testOut').cells[i].innerText)
+            }
 
-            var sTrows = sT.rows.length;
-            var sTcols = sT.rows.item(0).cells.length;
-            var tTrows = tT.rows.length;
-            var tTcols = tT.rows.item(0).cells.length;
+            for(i=1;i<document.getElementById("params").rows[0].length;i++){
+                pNames.push(document.getElementById('names').cells[i].innerText)
+                pTypes.push(document.getElementById('types').cells[i].innerText)
+            }
 
-            for(i=0;i<sT.rows.length;i++){
-                var objCells = sT.rows.item(i).cells;
-                for (var j = 0; j < objCells.length; j++) {
-                    sampleT = sampleT + objCells.item(j).textContent + ','
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://virajsule.me:3000/postTeacherAssignment",true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    alert(this.responseText)
                 }
-            }
-            sampleT = sampleT.substring(0, sampleT.length-1)
-            
+            };
 
-            for(i=0;i<tT.rows.length;i++){
-                var objCells = tT.rows.item(i).cells;
-                for (var j = 1; j < objCells.length; j++) {
-                    testT = testT + objCells.item(j).textContent + ','
-                }
-            }
+            console.log(xhr.send(JSON.stringify({
+                name:n,
+                preC:pre,
+                postC: post,
+                exInput: exIn.toString(),
+                exeOutput: exOut.toString(),
+                testInput: testIn.toString(),
+                testOutput: testOut.toString(),
+                numParams: numP,
+                paramNames: pNames.toString(),
+                paramTypes: pTypes.toString(),
+                lang: language,
+                code:c
+            })));
 
-            testT = testT.substring(0, testT.length-1)
-
-            for(i=0;i<paramArr.length-1;i++){
-                params+= paramArr[i] + ","
-            }
-            params += paramArr[paramArr.length-1]
             if(document.getElementById('paramsCheck').value === 'Yes'){
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "http://3.17.16.206:3000/postParam",true);
