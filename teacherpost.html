@@ -199,8 +199,6 @@
         codeText = editor.getValue();
         var callF = "console.log(myFunction(" + document.getElementById("execute").value + "));" 
         var xhr = new XMLHttpRequest();
-        alert(codeText);
-        alert(callF);
         xhr.open("POST", "http://virajsule.me:3000/execTeacherCode",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = "json"
@@ -259,7 +257,7 @@
         }
 
         function postAssignment(){
-            var cName = 'independent';
+            var cName = document.getElementById('cName').value;
             var aName = document.getElementById('name').value
             var pre = document.getElementById('preC').value
             var post = document.getElementById('postC').value
@@ -295,7 +293,8 @@
             xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'))
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    alert(this.responseText)
+                    console.log(this.responseText)
+                    // alert(this.responseText)
                 }
             };
 
@@ -581,7 +580,9 @@
     <br>
     <p id="output">Output:</p>
     <br> -->
+    <input  id="cName" type="text" placeholder="Class Name">
     <button onclick="postAssignment()">Post Assignment</button>
+    
 
     <script>
         var editor = ace.edit('editor');
