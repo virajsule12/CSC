@@ -5,6 +5,7 @@
     <script>
          
         var defaultVal=''
+        var initialCode=''
 
         function setDefault(){
             defaultVal = editor.getValue();
@@ -103,6 +104,7 @@
             
             editor.find('(')
             editor.replace(params)
+            initialCode = editor.getValue();
         }
 
         function showParams(){
@@ -175,11 +177,14 @@
             addParams();
         }
 
-        //compiles code from editor and returns output
-        function compileCode(){
-        var codeText = editor.getValue();
+    //compiles code from editor and returns output
+    function compileCode(){
+        var codeText = ''
+        codeText = editor.getValue();
         var callF = "console.log(myFunction(" + document.getElementById("execute").value + "));" 
         var xhr = new XMLHttpRequest();
+        alert(codeText);
+        alert(callF);
         xhr.open("POST", "http://virajsule.me:3000/execTeacherCode",true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = "json"
@@ -238,7 +243,8 @@
         }
 
         function postAssignment(){
-            var n = document.getElementById('name').value
+            var cName = 'independent';
+            var aName = document.getElementById('name').value
             var pre = document.getElementById('preC').value
             var post = document.getElementById('postC').value
             var exIn =[]
@@ -261,14 +267,16 @@
                 testOut.push(document.getElementById('testOut').cells[i].innerText)
             }
 
-            for(i=1;i<document.getElementById("params").rows[0].length;i++){
-                pNames.push(document.getElementById('names').cells[i].innerText)
-                pTypes.push(document.getElementById('types').cells[i].innerText)
-            }
+            // for(i=1;i<document.getElementById("params").rows[0].length;i++){
+            //     pNames.push(document.getElementById('names').cells[i].innerText)
+            //     pTypes.push(document.getElementById('types').cells[i].innerText)
+            // }
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "http://virajsule.me:3000/postTeacherAssignment",true);
             xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.responseType = 'text';
+            xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'))
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     alert(this.responseText)
@@ -276,7 +284,8 @@
             };
 
             console.log(xhr.send(JSON.stringify({
-                name:n,
+                className:cName,
+                assignmentName:aName,
                 preC:pre,
                 postC: post,
                 exInput: exIn.toString(),
@@ -284,44 +293,44 @@
                 testInput: testIn.toString(),
                 testOutput: testOut.toString(),
                 numParams: numP,
-                paramNames: pNames.toString(),
-                paramTypes: pTypes.toString(),
+                // paramNames: pNames.toString(),
+                // paramTypes: pTypes.toString(),
                 lang: language,
                 code:c
             })));
 
-            if(document.getElementById('paramsCheck').value === 'Yes'){
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://3.17.16.206:3000/postParam",true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                console.log(xhr.send(JSON.stringify({
-                    name: n,
-                    preCondition: pre,
-                    postCondition: post,
-                    sampleTable: sampleT,
-                    testTable: testT,
-                    code:c,
-                    arr: params,
-                    sTR:sTrows,
-                    sTC:sTcols,
-                    tTR:tTrows,
-                    tTC:tTcols,
-                    teacher:localStorage.getItem('signedIn')
-                })));
-            }
-            else{
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://3.17.16.206:3000/postNoParam",true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                console.log(xhr.send(JSON.stringify({
-                    name: n,
-                    preCondition: pre,
-                    postCondition: post,
-                    sampleOutput: sampleO,
-                    code: c,
-                    teacher:localStorage.getItem('signedIn')
-                })));
-                }
+            // if(document.getElementById('paramsCheck').value === 'Yes'){
+            //     var xhr = new XMLHttpRequest();
+            //     xhr.open("POST", "http://3.17.16.206:3000/postParam",true);
+            //     xhr.setRequestHeader("Content-Type", "application/json");
+            //     console.log(xhr.send(JSON.stringify({
+            //         name: n,
+            //         preCondition: pre,
+            //         postCondition: post,
+            //         sampleTable: sampleT,
+            //         testTable: testT,
+            //         code:c,
+            //         arr: params,
+            //         sTR:sTrows,
+            //         sTC:sTcols,
+            //         tTR:tTrows,
+            //         tTC:tTcols,
+            //         teacher:localStorage.getItem('signedIn')
+            //     })));
+            // }
+            // else{
+            //     var xhr = new XMLHttpRequest();
+            //     xhr.open("POST", "http://3.17.16.206:3000/postNoParam",true);
+            //     xhr.setRequestHeader("Content-Type", "application/json");
+            //     console.log(xhr.send(JSON.stringify({
+            //         name: n,
+            //         preCondition: pre,
+            //         postCondition: post,
+            //         sampleOutput: sampleO,
+            //         code: c,
+            //         teacher:localStorage.getItem('signedIn')
+            //     })));
+            //     }
         }
     
     </script>

@@ -5,7 +5,7 @@
   <script>
       function createClass(){
         // alert(localStorage.getItem('cscToken'))
-        var cCode = Math.floor(Math.random(0,1)*1000000);
+        var cCode = randomString(6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         var cName = document.getElementById('cName').value;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://virajsule.me:3000/createClass",true);
@@ -22,6 +22,12 @@
             class_code: cCode.toString(),
             class_name: cName,
         })));
+    }
+
+    function randomString(length, chars) {
+      var result = '';
+      for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+      return result;
     }
       
   </script>
