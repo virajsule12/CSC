@@ -1,0 +1,219 @@
+<html>
+  <head >
+    <title>Simple login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+         
+    var defaultVal=''
+    var initialCode=''
+    var assignments = [];
+
+    function clickedJoin(){
+        window.location.href = "http://virajsule.me/joinclass.html";
+      }
+
+      function clickedAssignments(){
+        window.location.href = "http://virajsule.me/studentassignments.html";
+      }
+
+      function clickedWork(){
+        window.location.href = "http://virajsule.me/studentsolve.html";
+      }
+
+      function clickedLogout(){
+        window.location.href = "http://virajsule.me/index.html";
+      }
+
+    function setDefault(){
+        defaultVal = editor.getValue();
+    } 
+
+    function getAssignments() {
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getAssignments", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'text';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                assignments = this.responseText.split(",");
+                createAssignments();
+            }
+        };
+    }
+
+    function createAssignments() {
+        for(i = 0; i < assignments.length; i++) {
+            let temp = document.createElement("a");
+            temp.innerHTML = assignments[i];
+            temp.addEventListener("click", function(e) {
+                window.location.href = "http://virajsule.me/studentsolve.html";
+            });
+            document.getElementById("assignmentView").append(temp);
+        }
+    }
+    
+    </script>
+
+
+    <style type="text/css" media="screen">
+        #heading {
+            text-align: center;
+        }
+        .container{
+            text-align: left;
+            
+        }
+        .x{
+            display: inline-block;
+        }
+        #container{
+            height: 400px;
+            width: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+        #editor { 
+            height:  30vh;
+            /* min-height: 50vh; */
+            width: 700px;
+            display: inline-block;
+        }
+        /* #exampleTable{
+            visibility: hidden;
+        }
+        #testTable{
+            visibility: hidden;
+        } */
+        /* #preC{
+            visibility: hidden;
+        } */
+        .tables{
+            width: fit-content;
+            color: #4ABDAC;
+            font-weight:bold;
+            background-color: #F7B733;
+            
+        }
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 40%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #F7B733;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: #4ABDAC;
+            font-weight: bold;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: rgb(70, 63, 3);
+        } 
+
+        .iobtn {
+            visibility: visible;
+        }  
+
+        .left-element {
+            display: inline-block;
+            float: left;
+        }
+
+        .right-element {
+            display: inline-block;
+            
+        }
+        .dropbtn {
+            background-color: #3498DB;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #2980B9;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .assignments {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .assignments a {
+            text-decoration: underline;
+            font-size: 50px;
+            margin: 10px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display: block;}
+                
+    </style>
+  </head>
+  <body onload = "getAssignments()" bgcolor = "#4ABDAC">
+    <ul>
+        <li><a class="active" onclick="clickedJoin()">Join a Class</a></li>
+        <li><a onclick="clickedAssignments()">View Assignments</a></li>
+        <li><a onclick="clickedWork()">Work on Assignments</a></li>
+        <li><a onclick="clickedLogout()">Logout</a></li>
+      </ul>
+    <h1 id="heading">Assignments:</h1>
+    <div class = "assignments" id = "assignmentView">
+
+    </div>
+  </body>
+</html>

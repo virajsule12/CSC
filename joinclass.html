@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <title>Simple login</title>
+  </head>
+  <script>
+
+      function checkInClass(){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://virajsule.me:3000/checkIfInClass",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = "text"
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText == "In Class"){
+                    document.getElementById('joinBtn').disabled= true;
+                    document.getElementById('classTxt').innerText = "You are already in a class!"
+                    document.getElementById('classTxt').style.visibility= 'visible';
+                }
+                
+            }
+        };
+      }
+
+    function clickedJoin(){
+        window.location.href = "http://virajsule.me/joinclass.html";
+      }
+
+    function clickedAssignments(){
+        window.location.href = "http://virajsule.me/studentassignments.html";
+    }
+
+    function clickedWork(){
+        window.location.href = "http://virajsule.me/studentsolve.html";
+    }
+
+    function clickedLogout(){
+        window.location.href = "http://virajsule.me/index.html";
+    }
+
+      function joinClass(){
+        // alert(localStorage.getItem('cscToken'))
+        var cCode = document.getElementById('classcode').value;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://virajsule.me:3000/joinClass",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = "text"
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'))
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText == "Successful query. Joined class"){
+                    document.getElementById('joinBtn').disabled = true;
+                    document.getElementById('classTxt').style.visibility='hidden'
+                }
+                else{
+                    document.getElementById('classTxt').innerText = "Invalid Class Code"
+                    document.getElementById('classTxt').style.visibility='visible'
+                }
+            }
+        };
+
+        console.log(xhr.send(JSON.stringify({
+            class_code: cCode.toString(),
+        })));
+    }
+      
+  </script>
+  <style>
+       ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #F7B733;
+        }
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: #4ABDAC;
+            font-weight: bold;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: rgb(70, 63, 3);
+        } 
+
+        #classTxt {
+            visibility: hidden;
+            color: rgb(175, 1, 1);
+            font-weight: bold;
+        }
+  </style>
+  <body onload="checkInClass()" bgcolor = "#4ABDAC">
+    <ul>
+        <li><a class="active" onclick="clickedJoin()">Join a Class</a></li>
+        <li><a onclick="clickedAssignments()">View Assignments</a></li>
+        <li><a onclick="clickedWork()">Work on Assignments</a></li>
+        <li><a onclick="clickedLogout()">Logout</a></li>
+      </ul>
+
+      <h1>Join a Class</h1>
+    <input type="text" placeholder="Enter Class Code" id="classcode">
+    <button onclick="joinClass()" id="joinBtn">Join Class</button>
+    <p id="classTxt">You are already in a class!</p>
+
+  </body>
+</html>

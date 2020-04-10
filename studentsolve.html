@@ -9,6 +9,22 @@
       var numCol;
       var tblArr = [];
 
+      function clickedJoin(){
+        window.location.href = "http://virajsule.me/joinclass.html";
+      }
+
+      function clickedAssignments(){
+        window.location.href = "http://virajsule.me/studentassignments.html";
+      }
+
+      function clickedWork(){
+        window.location.href = "http://virajsule.me/studentsolve.html";
+      }
+
+      function clickedLogout(){
+        window.location.href = "http://virajsule.me/index.html";
+      }
+
       function loadQuestion(){
         var xhr = new XMLHttpRequest();
             xhr.open("POST", "http://3.17.16.206:3000/loadQuestion",true);
@@ -328,9 +344,39 @@
         tr:nth-child(even) {
             background-color: #dddddd;
         }
+        ul {
+         list-style-type: none;
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+         background-color: #F7B733;
+        }
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: #4ABDAC;
+            font-weight: bold;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: rgb(70, 63, 3);
+        } 
     </style>
   </head>
   <body onload="loadQuestion()" bgcolor = "#4ABDAC">
+    <ul>
+        <li><a class="active" onclick="clickedJoin()">Join a Class</a></li>
+        <li><a onclick="clickedAssignments()">View Assignments</a></li>
+        <li><a onclick="clickedWork()">Work on Assignments</a></li>
+        <li><a onclick="clickedLogout()">Logout</a></li>
+      </ul>
+
     <div class = "upper">
         <p id = "dueDate">Due: 3/21/19 at 11:59pm</p>
         <span class = "userBlock">

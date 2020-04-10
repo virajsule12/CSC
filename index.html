@@ -88,6 +88,7 @@ function studentLogin(){
       if (this.readyState == 4 && this.status == 200) {
           if(this.response.token !== 'incorrect'){
             localStorage.setItem('cscToken', this.response.token)
+            window.location.href = "http://virajsule.me/joinclass.html";
           }
           else{
             document.getElementById('incorrectL').style.visibility = 'visible';
@@ -112,6 +113,7 @@ function teacherLogin(){
       if (this.readyState == 4 && this.status == 200) {
           if(this.response.token !== 'incorrect'){
             localStorage.setItem('cscToken', this.response.token)
+            window.location.href = "http://virajsule.me/createclass.html";
           }
           else{
             document.getElementById('incorrectR').style.visibility = 'visible'

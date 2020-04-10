@@ -3,6 +3,23 @@
     <title>Simple login</title>
   </head>
   <script>
+
+      function clickedClasses(){
+        window.location.href = "http://virajsule.me/classlist.html";
+      }
+
+      function clickedPost(){
+        window.location.href = "http://virajsule.me/teacherpost.html";
+      }
+
+      function clickedCreate(){
+        window.location.href = "http://virajsule.me/createclass.html";
+      }
+
+      function clickedLogout(){
+        window.location.href = "http://virajsule.me/index.html";
+      }
+
       function createClass(){
         // alert(localStorage.getItem('cscToken'))
         var cCode = randomString(6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -31,7 +48,40 @@
     }
       
   </script>
-  <body>
+  <style>
+    ul {
+         list-style-type: none;
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+         background-color: #F7B733;
+     }
+     li {
+         float: left;
+     }
+
+     li a {
+         display: block;
+         color: #4ABDAC;
+         font-weight: bold;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+     }
+
+     li a:hover {
+         background-color: rgb(70, 63, 3);
+     } 
+</style>
+  <body bgcolor = "#4ABDAC">
+    <ul>
+      <li><a class="active" onclick="clickedClasses();">Classes</a></li>
+      <li><a onclick="clickedPost();">Post Assignment</a></li>
+      <li><a onclick="clickedCreate()">Create Class</a></li>
+      <li><a onclick="clickedLogout()">Logout</a></li>
+    </ul>
+
+    <h1>Create a Class</h1>
     <input type="text" placeholder="Enter Class Name" id="cName">
     <button onclick="createClass()">Create Class</button>
 
