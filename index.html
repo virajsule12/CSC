@@ -233,7 +233,7 @@ h2 {
 }
 
 .typewriter h1 {
-  color: #fff;
+  color: rgb(42, 53, 158);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: .1em solid white; /* The typwriter cursor */
@@ -263,12 +263,12 @@ html {
 }
 .container {
   position: relative;
-  background: #f1f1f1;
+  /* background: #f1f1f1; */
   margin: 40px auto;
   width: 80%;
   height: 360px;
   z-index: 100;
-  opacity: .8;
+  /* opacity: .8; */
   
 }
 .left-bg, .right-bg {
@@ -279,12 +279,15 @@ html {
   transition: .25s ease;
 }
 .left-bg {
-  background-color:rgb(112,241,135);
+  border-radius: 25px 0px 0px 25px;
+  background-color:aqua;
   left: 0;
-  opacity: .90;
+  /* opacity: .90; */
 }
 .right-bg {
-  background-color:rgb(68,153,243);
+  border-radius: 0px 25px 25px 0px;
+  background-color: aqua;
+  /* background-color:rgb(68,153,243); */
   background-position: right;
   right: 0;
 }
@@ -317,6 +320,7 @@ html {
   right: 0;
 }
 .left-bg:hover {
+  background-color: #fffdd1;
   width: 60%;
 }
 .left-bg:hover + .right-bg {
@@ -352,14 +356,15 @@ body{
 
 .context h1{
     text-align: center;
-    color: #fff;
+    color: rgb(42, 53, 158);;
     font-size: 70px;
     padding-top: 20px;
 }
 
 
 .area{
-    background: rgb(119, 6, 134);  
+  background-color: #9999ff;
+    /* background: rgb(119, 6, 134);   */
     background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
     width: 100%;
     height:100vh;
