@@ -34,18 +34,71 @@ function clickedTeacher(){
 
 }
 
-function login(){
+function create(){
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
-  if(activeS){
-    studentLogin(username,password);
-  }
-  else{
-    teacherLogin(username,password);
-  }
+  var cPassword = document.getElementById('confirmPassword').value;
+
+    if(password == cPassword){
+        if(activeS){
+            createStudent(username,password);
+        }
+        else{
+            createTeacher(username,password);
+        }
+    }
+    else{
+        document.getElementById('alert').style.visibility="visible"
+    }
+
 }
 
-function studentLogin(uIn,pIn){
+function createStudent(uIn,pIn){
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://virajsule.me:3000/createstudent",true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.responseType = "text"
+  xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          if(this.responseText == "successful query"){
+              studentLogin(uIn,pIn)
+          }
+      }
+  };
+
+  console.log(xhr.send(JSON.stringify({
+      user_name: uIn,
+      password: pIn,
+      code: ""
+  })));
+}
+
+function createTeacher(uIn,pIn){
+    console.log('asdf')
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://virajsule.me:3000/createteacher",true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.responseType = "text"
+  xhr.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          if(this.responseText == 'successful query'){
+            teacherLogin(uIn,pIn)
+          }
+          else{
+            // document.getElementById('incorrectL').style.visibility = 'visible'
+            
+          }
+      }
+  };
+
+  console.log(xhr.send(JSON.stringify({
+      user_name: uIn,
+      password: pIn
+  })));
+}
+
+
+function studentLogin(u,p){
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://virajsule.me:3000/studentsignin",true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -56,19 +109,20 @@ function studentLogin(uIn,pIn){
             localStorage.setItem('cscToken', this.response.token)
             window.location.href = "http://virajsule.me/joinclass.html";
           }
-          else{
-            document.getElementById('incorrectL').style.visibility = 'visible';
-          }
+        //   else{
+        //     document.getElementById('incorrectL').style.visibility = 'visible';
+        //   }
       }
   };
 
   console.log(xhr.send(JSON.stringify({
-      user: uIn,
-      password: pIn
+      user: u,
+      password: p
   })));
 }
 
-function teacherLogin(uIn,pIn){
+function teacherLogin(u,p){
+    console.log('hello')
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://virajsule.me:3000/teachersignin",true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -79,43 +133,20 @@ function teacherLogin(uIn,pIn){
             localStorage.setItem('cscToken', this.response.token)
             window.location.href = "http://virajsule.me/createclass.html";
           }
-          else{
-            document.getElementById('incorrectL').style.visibility = 'visible'
+        //   else{
+        //     document.getElementById('incorrectL').style.visibility = 'visible'
 
-          }
+        //   }
       }
   };
 
   console.log(xhr.send(JSON.stringify({
-      user: uIn,
-      password: pIn
+      user: u,
+      password: p
   })));
 }
 
-function visibleLoginL(){
-  document.getElementsByClassName('hiddenL')[0].style.visibility = 'visible';
-  document.getElementById('incorrectL').style.visibility = 'hidden'
-  document.getElementById('sHeading').style.visibility = 'hidden'
-}
-
-function visibleLoginR(){
-  document.getElementsByClassName('hiddenR')[0].style.visibility = 'visible';
-  document.getElementById('incorrectR').style.visibility = 'hidden'
-  document.getElementById('tHeading').style.visibility = 'hidden'
-}
-
-function hideLoginL(){
-  document.getElementsByClassName('hiddenL')[0].style.visibility = 'hidden';
-  document.getElementById('sHeading').style.visibility = 'visible'
-}
-
-function hideLoginR(){
-  document.getElementsByClassName('hiddenR')[0].style.visibility = 'hidden';
-  document.getElementById('tHeading').style.visibility = 'visible'
-}
-
-
-setInterval(updateGradient,10);</script>
+</script>
 
 <style type="text/css" media="screen">
 @import url("https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap");
@@ -312,7 +343,7 @@ a:hover {
   align-items: center;
 }
 
-#incorrectL{
+#alert{
   font-size: 12px;
   text-align: center;
   margin-bottom: 0em;
@@ -355,27 +386,29 @@ a:hover {
     </div>
 
     <div class="form-group">
+        <input name="first" class="form-control" placeholder="First Name" value="" autofocus="autofocus" type="text" id="first" required="required">
+      </div>
+
+      <div class="form-group">
+        <input name="last" class="form-control" placeholder="Last Name" value="" autofocus="autofocus" type="text" id="last" required="required">
+      </div>
+
+    <div class="form-group">
       <input name="username" class="form-control" placeholder="Username" value="" autofocus="autofocus" type="text" id="username" required="required">
     </div>
     <div class="form-group">
       <input name="password" class="form-control" placeholder="Password" value="" type="password" id="password" required="required">
     </div>
-    <div class="form-group subform">
-      <label class="checkbox-inline" for="UserRememberMe">
-        <input type="checkbox" name="rememberMe" value="1" id="UserRememberMe">Remember me
-      </label>
-      <a href="#" class="resetpassword">Reset password</a>
+    <div class="form-group">
+        <input name="password" class="form-control" placeholder="Confirm Password" value="" type="password" id="confirmPassword" required="required">
+      </div>
+    <div class="form-group">
+      <p id="alert">Passwords don't match!</p>
     </div>
     <div class="form-group">
-      <p class="incorrectLogin" id="incorrectL">Sorry, but the Username/Password you entered is incorrect</p>
-    </div>
-    <div class="form-group">
-      <button class="btn-signin" onclick="login()">
-        Log In
+      <button class="btn-signin" onclick="create()">
+        Sign Up
       </button>
-    </div>
-    <div class="form-group text-center">
-      <a href="#" class="signup">Sign up</a>
     </div>
   </div>
 </body>

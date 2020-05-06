@@ -8,22 +8,6 @@
     var initialCode=''
     var assignments = [];
 
-    function clickedJoin(){
-        window.location.href = "http://virajsule.me/joinclass.html";
-      }
-
-      function clickedAssignments(){
-        window.location.href = "http://virajsule.me/studentassignments.html";
-      }
-
-      function clickedWork(){
-        window.location.href = "http://virajsule.me/studentsolve.html";
-      }
-
-      function clickedLogout(){
-        window.location.href = "http://virajsule.me/index.html";
-      }
-
     function setDefault(){
         defaultVal = editor.getValue();
     } 
@@ -206,10 +190,10 @@
   </head>
   <body onload = "getAssignments()" bgcolor = "#4ABDAC">
     <ul>
-        <li><a class="active" onclick="clickedJoin()">Join a Class</a></li>
-        <li><a onclick="clickedAssignments()">View Assignments</a></li>
-        <li><a onclick="clickedWork()">Work on Assignments</a></li>
-        <li><a onclick="clickedLogout()">Logout</a></li>
+        <li><a href="http://virajsule.me/joinclass.html" class="active">Join a Class</a></li>
+        <li><a href="http://virajsule.me/studentassignments.html">View Assignments</a></li>
+        <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li>
+        <li><a href="http://virajsule.me/index.html">Logout</a></li>
       </ul>
     <h1 id="heading">Assignments:</h1>
     <div class = "assignments" id = "assignmentView">

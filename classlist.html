@@ -7,23 +7,7 @@
         var defaultVal=''
         var initialCode=''
         var classes = [];
-
-        function clickedClasses(){
-            window.location.href = "http://virajsule.me/classlist.html";
-        }
-
-        function clickedPost(){
-            window.location.href = "http://virajsule.me/teacherpost.html";
-        }
-
-        function clickedCreate(){
-            window.location.href = "http://virajsule.me/createclass.html";
-        }
-
-        function clickedLogout(){
-            window.location.href = "http://virajsule.me/index.html";
-        }
-
+        
         function setDefault(){
             defaultVal = editor.getValue();
         }
@@ -256,10 +240,10 @@
   </head>
   <body onload = "getClasses()" onload="setDefault()"  onload = "createClasses()" bgcolor = "#4ABDAC">
     <ul>
-        <li><a class="active" onclick="clickedClasses();">Classes</a></li>
-        <li><a onclick="clickedPost();">Post Assignment</a></li>
-        <li><a onclick="clickedCreate()">Create Class</a></li>
-        <li><a onclick="clickedLogout()">Logout</a></li>
+        <li><a href="http://virajsule.me/classlist.html" class="active">Classes</a></li>
+      <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
+      <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
+      <li><a href="http://virajsule.me/index.html">Logout</a></li>
       </ul>
     <h1 id="heading">Your Classes</h1>
     <!-- <table>

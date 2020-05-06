@@ -5,39 +5,23 @@
   <script>
 
       function checkInClass(){
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "http://virajsule.me:3000/checkIfInClass",true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.responseType = "text"
-        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
-        xhr.send(null);
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                if(this.responseText == "In Class"){
-                    document.getElementById('joinBtn').disabled= true;
-                    document.getElementById('classTxt').innerText = "You are already in a class!"
-                    document.getElementById('classTxt').style.visibility= 'visible';
-                }
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("GET", "http://virajsule.me:3000/checkIfInClass",true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // xhr.responseType = "text"
+        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        // xhr.send(null);
+        // xhr.onreadystatechange = function() {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         if(this.responseText == "In Class"){
+        //             document.getElementById('joinBtn').disabled= true;
+        //             document.getElementById('classTxt').innerText = "You are already in a class!"
+        //             document.getElementById('classTxt').style.visibility= 'visible';
+        //         }
                 
-            }
-        };
+        //     }
+        // };
       }
-
-    function clickedJoin(){
-        window.location.href = "http://virajsule.me/joinclass.html";
-      }
-
-    function clickedAssignments(){
-        window.location.href = "http://virajsule.me/studentassignments.html";
-    }
-
-    function clickedWork(){
-        window.location.href = "http://virajsule.me/studentsolve.html";
-    }
-
-    function clickedLogout(){
-        window.location.href = "http://virajsule.me/index.html";
-    }
 
       function joinClass(){
         // alert(localStorage.getItem('cscToken'))
@@ -73,7 +57,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #F7B733;
+            background-color: #1b3e6e;
         }
         li {
             float: left;
@@ -81,7 +65,7 @@
 
         li a {
             display: block;
-            color: #4ABDAC;
+            color: #ffffff;
             font-weight: bold;
             text-align: center;
             padding: 14px 16px;
@@ -98,18 +82,28 @@
             font-weight: bold;
         }
   </style>
-  <body onload="checkInClass()" bgcolor = "#4ABDAC">
+  <body onload="checkInClass()" bgcolor = "#FFFFFF">
     <ul>
-        <li><a class="active" onclick="clickedJoin()">Join a Class</a></li>
-        <li><a onclick="clickedAssignments()">View Assignments</a></li>
-        <li><a onclick="clickedWork()">Work on Assignments</a></li>
-        <li><a onclick="clickedLogout()">Logout</a></li>
+        <li><a href="http://virajsule.me/joinclass.html" class="active">Join a Class</a></li>
+        <li><a href="http://virajsule.me/studentassignments.html">View Assignments</a></li>
+        <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li>
+        <li><a href="http://virajsule.me/index.html">Logout</a></li>
       </ul>
 
-      <h1>Join a Class</h1>
-    <input type="text" placeholder="Enter Class Code" id="classcode">
-    <button onclick="joinClass()" id="joinBtn">Join Class</button>
-    <p id="classTxt">You are already in a class!</p>
+      
+    <div class="block">
+        <h1>Join a Class</h1>
+        <input type="text" placeholder="Enter Class Code" id="classcode">
+        <button onclick="joinClass()" id="joinBtn">Join Class</button>
+        <p id="classTxt">You are already in a class!</p>
+    </div>
+
+    <!-- <div class="block">
+        <h1>Join a Class</h1>
+        <input type="text" placeholder="Enter Class Code" id="classcode">
+        <button onclick="joinClass()" id="joinBtn">Join Class</button>
+        <p id="classTxt">You are already in a class!</p>
+    </div> -->
 
   </body>
 </html>
