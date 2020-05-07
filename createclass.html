@@ -3,6 +3,45 @@
     <title>Simple login</title>
   </head>
   <script>
+
+    function loadClasses(){
+      var classes;
+      var codes;
+      var students;
+
+      var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getAllStudents", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'json';
+        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                classes=this.response.classes;
+                codes = this.response.codes;
+                students = this.response.students;
+                for(i=0;i<classes.length;i++){
+                  console.log(classes[0])
+                  var table = document.getElementById('classes')
+                  var row = table.insertRow(i+1);
+                  var cell1 = row.insertCell(0);
+                  var cell2 = row.insertCell(1);
+                  var cell3 = row.insertCell(2);
+
+                  cell1.innerHTML = classes[i];
+                  cell2.innerHTML = codes[i];
+                  cell3.innerHTML = students[i].length;
+
+                }
+            }
+      };
+    
+    
+    }
+
+
       function createClass(){
         // alert(localStorage.getItem('cscToken'))
         var cCode = randomString(6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -33,11 +72,17 @@
   </script>
   <style>
     ul {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
          list-style-type: none;
          margin: 0;
          padding: 0;
          overflow: hidden;
-         background-color: #F7B733;
+         background-color: #1b3e6e;
+         border-style: solid;
+         border-color: #1b3e6e;
      }
      li {
          float: left;
@@ -45,7 +90,22 @@
 
      li a {
          display: block;
-         color: #4ABDAC;
+         color: #ffffff;
+         font-weight: bold;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+         border-style: solid;
+         border-color: #1b3e6e;
+         border-width: 2px;
+
+         
+     }
+
+     .active{
+        display: block;
+         color: #1b3e6e;
+         background-color: white;
          font-weight: bold;
          text-align: center;
          padding: 14px 16px;
@@ -53,21 +113,88 @@
      }
 
      li a:hover {
-         background-color: rgb(70, 63, 3);
+         background-color: white;
+         color: #1b3e6e;
      } 
+
+     .tables{
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+            /* color: #4ABDAC;
+            font-weight:bold;
+            background-color: #F7B733; */
+            
+        }
+        table {
+        font-family: arial, sans-serif;
+        width: 40%;
+        border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th{
+          font-weight: bold;
+          background-color: #1b3e6e;
+          color: white;
+          
+          /* border-radius: 20px; */
+        }
+        
+
+        #name{
+          text-align: center;
+          font-weight: bold;
+          /* color: #1b3e6e; */
+          font-size: 30px;
+        }
+
+        #logo{
+          position: relative;
+          z-index: 100;
+          bottom: 5px;
+        
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px;
+
+
+        }
 </style>
-  <body bgcolor = "#4ABDAC">
-    <ul>
-      <li><a href="http://virajsule.me/classlist.html" class="active">Classes</a></li>
-      <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
-      <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
-      <li><a href="http://virajsule.me/index.html">Logout</a></li>
-    </ul>
+  <body bgcolor = "#ffffff" onload="loadClasses()">
+
+    <div class="header">
+      <img src="logo.png" id="logo">
+      <ul>
+        <li><a href="http://virajsule.me/classlist.html">Classes</a></li>
+        <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
+        <li><a href="http://virajsule.me/createclass.html" class="active">Create Class</a></li>
+        <li><a href="http://virajsule.me/index.html">Logout</a></li>
+      </ul>
+    </div>
 
     <h1>Create a Class</h1>
     <input type="text" placeholder="Enter Class Name" id="cName">
     <button onclick="createClass()">Create Class</button>
     <p id='codeTxt'></p>
+
+    <p id="name">CLASSES</p>
+    <table id="classes" class="tables">
+      <tr>
+        <th>Class Name</th>
+        <th>Access Code</th>
+        <th>Students</th>
+      </tr>
+  </table>
 
   </body>
 </html>
