@@ -13,21 +13,21 @@
         }
 
         function getClasses() {
-            var xhr = new XMLHttpRequest();
-            // alert(localStorage.getItem('cscToken'));
-            xhr.open( "GET", "http://virajsule.me:3000/getClasses", true ); 
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.responseType = 'text';
-            xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
-            xhr.send(null);
+            // var xhr = new XMLHttpRequest();
+            // // alert(localStorage.getItem('cscToken'));
+            // xhr.open( "GET", "http://virajsule.me:3000/getClasses", true ); 
+            // xhr.setRequestHeader("Content-Type", "application/json");
+            // xhr.responseType = 'text';
+            // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+            // xhr.send(null);
 
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    classes = this.responseText.split(",");
-                    console.log(classes);
-                    createClasses();
-                }
-            };
+            // xhr.onreadystatechange = function() {
+            //     if (this.readyState == 4 && this.status == 200) {
+            //         classes = this.responseText.split(",");
+            //         console.log(classes);
+            //         createClasses();
+            //     }
+            // };
         }
 
         function createClasses() {
