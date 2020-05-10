@@ -4,28 +4,67 @@
   </head>
   <script>
 
-      function checkInClass(){
-        // var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "http://virajsule.me:3000/checkIfInClass",true);
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        // xhr.responseType = "text"
-        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
-        // xhr.send(null);
-        // xhr.onreadystatechange = function() {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         if(this.responseText == "In Class"){
-        //             document.getElementById('joinBtn').disabled= true;
-        //             document.getElementById('classTxt').innerText = "You are already in a class!"
-        //             document.getElementById('classTxt').style.visibility= 'visible';
-        //         }
-                
-        //     }
-        // };
-      }
+    function loadClasses(){
+        var classes;
+        var admins;
+
+        var xhr = new XMLHttpRequest();
+            // alert(localStorage.getItem('cscToken'));
+            xhr.open( "GET", "http://virajsule.me:3000/getAllStudentClasses", true ); 
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+            xhr.send(null);
+
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    classes=this.response.names;
+                    admins = this.response.admins;
+                    for(i=0;i<classes.length;i++){
+                    console.log(classes[0])
+                    var table = document.getElementById('classes')
+                    var row = table.insertRow(i+1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+
+                    cell1.innerHTML = classes[i];
+                    cell2.innerHTML = admins[i];
+
+                    }
+                }
+        };
+    
+    
+    }
+
+    function updateTable(classCode){
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://virajsule.me:3000/updateTable",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = "json"
+        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'))
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var name= this.response.name;
+                var admin = this.response.admin;
+                var table=document.getElementById('classes');
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.innerHTML = name;
+                cell2.innerHTML = admin;
+            }
+        };
+
+        console.log(xhr.send(JSON.stringify({
+            class_code: classCode
+        })));
+
+    }
 
       function joinClass(){
         // alert(localStorage.getItem('cscToken'))
-        var cCode = document.getElementById('classcode').value;
+        var cCode = document.getElementById('classcode').value.toUpperCase();
         
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://virajsule.me:3000/joinClass",true);
@@ -35,75 +74,270 @@
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 if(this.responseText == "Successful query. Joined class"){
-                    document.getElementById('joinBtn').disabled = true;
-                    document.getElementById('classTxt').style.visibility='hidden'
+                    // document.getElementById('joinBtn').disabled = true;
+                    document.getElementById('classTxt').style.visibility='visible'
+                    document.getElementById('classTxt').innerText = "Success!"
+                    document.getElementById('classTxt').style.color='#2EE59D'
+                    updateTable(cCode)
+                }
+                else if(this.responseText == "Invalid Class Code"){
+                    document.getElementById('classTxt').style.color= '#AF0101';
+                    document.getElementById('classTxt').innerText = "Invalid Class Code"
+                    document.getElementById('classTxt').style.visibility='visible'
                 }
                 else{
-                    document.getElementById('classTxt').innerText = "Invalid Class Code"
+                    document.getElementById('classTxt').style.color= '#AF0101';
+                    document.getElementById('classTxt').innerText = "Already Joined This Class!"
                     document.getElementById('classTxt').style.visibility='visible'
                 }
             }
         };
 
         console.log(xhr.send(JSON.stringify({
-            class_code: cCode.toString(),
+            class_code: cCode.toString()
         })));
     }
       
   </script>
   <style>
+      * {
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #1b3e6e;
-        }
-        li {
-            float: left;
-        }
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+         list-style-type: none;
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+         background-color: #1b3e6e;
+         border-style: solid;
+         border-color: #1b3e6e;
+     }
+     li {
+         float: left;
+     }
 
-        li a {
+     li a {
+         display: block;
+         color: #ffffff;
+         font-weight: bold;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+         border-style: solid;
+         border-color: #1b3e6e;
+         border-width: 2px;
+         font-size: 1vw;
+     }
+     .active{
             display: block;
-            color: #ffffff;
+            color: #1b3e6e;
+            background-color: white;
             font-weight: bold;
             text-align: center;
             padding: 14px 16px;
             text-decoration: none;
+     }
+
+     #logo{
+          position: relative;
+          z-index: 100;
+          bottom: 5px;
+        
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px;
+
+
         }
 
-        li a:hover {
-            background-color: rgb(70, 63, 3);
-        } 
+    li a:hover {
+        background-color: white;
+        color: #1b3e6e;
+    } 
 
-        #classTxt {
-            visibility: hidden;
-            color: rgb(175, 1, 1);
-            font-weight: bold;
+    #classTxt {
+        visibility: hidden;
+        color: #AF0101;
+        font-weight: bold;
+
+    }
+
+
+    #classcode{
+        /* width: 12vw; */
+        height: 5vw;
+        width: 12vw;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: black;
+        font-size: 2.5vw;
+        border-style: solid;
+        /* border-radius: 50px; */
+        text-align: center;
+        border-color: #1b3e6e;
+        outline: none;
+        padding: 1px;
+        
+
+    }
+    #joinbtn{
+        width: 12vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        background-color: #1b3e6e;
+        color: white;
+        border-radius: 20px;
+        margin-top: 5px;
+        outline: none;
+        font-size: 12px;
+        line-height: 16px;
+        transition: all 0.3s;
+        font-weight: 400;
+        letter-spacing: 1px;
+    }
+    #joinbtn:hover{
+        background-color: #2EE59D;
+        box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+    #top{
+        margin-bottom: 0px;
+        margin-left: 1vw;
+        width: 12vw;
+        font-size: 1.2vw;
+    }
+
+    .tables{
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+            /* color: #4ABDAC;
+            font-weight:bold;
+            background-color: #F7B733; */
+            
         }
+        table {
+        font-family: arial, sans-serif;
+        width: 40%;
+        border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th{
+          font-weight: bold;
+          background-color: #1b3e6e;
+          color: white;
+          
+          /* border-radius: 20px; */
+        }
+        .footer{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #1b3e6e;
+            color: white;
+            /* text-align: center; */
+            display: inline-block;
+            height: auto;
+        }
+
+        .foot{
+            position: absolute;
+            text-align: left;
+            margin-left: 3em;
+        }
+
+        .footR{
+            float:right;
+            margin-right: 3em;
+            /* width: 1200px; */
+            /* margin: 0px auto -1px auto; */
+            /* padding: 15px; */
+            
+        }
+        #priv{
+            display:inline-block;
+            text-decoration: none;
+            
+            /* width: 800px; */
+        }
+
+        #priv:hover{
+            text-decoration: underline;
+
+
+        }
+
+        #terms:hover{
+            text-decoration: underline;
+
+
+        }
+
+        #terms{
+            display:inline-block;
+            text-decoration: none;
+            /* width: 350px; */
+        }
+
+
   </style>
-  <body onload="checkInClass()" bgcolor = "#FFFFFF">
-    <ul>
-        <li><a href="http://virajsule.me/joinclass.html" class="active">Join a Class</a></li>
-        <li><a href="http://virajsule.me/studentassignments.html">View Assignments</a></li>
-        <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li>
-        <li><a href="http://virajsule.me/index.html">Logout</a></li>
-      </ul>
+  <body onload="loadClasses()" bgcolor = "#FFFFFF">
+
+    <div>
+        <img src="logo.png" id='logo'>
+        <ul>
+            <li><a href="http://virajsule.me/joinclass.html" class="active">Join a Class</a></li>
+            <li><a href="http://virajsule.me/studentassignments.html">View Assignments</a></li>
+            <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li>
+            <li><a href="http://virajsule.me/index.html">Logout</a></li>
+          </ul>
+
+    </div>
 
       
     <div class="block">
-        <h1>Join a Class</h1>
-        <input type="text" placeholder="Enter Class Code" id="classcode">
+        <!-- <h1>Join a Class</h1> -->
+        <p id="top">Enter a Class Code:</p>
+        <input type="text" id="classcode" maxlength="6" onkeypress="return /[a-z]/i.test(event.key)">
         <button onclick="joinClass()" id="joinBtn">Join Class</button>
         <p id="classTxt">You are already in a class!</p>
     </div>
 
-    <!-- <div class="block">
-        <h1>Join a Class</h1>
-        <input type="text" placeholder="Enter Class Code" id="classcode">
-        <button onclick="joinClass()" id="joinBtn">Join Class</button>
-        <p id="classTxt">You are already in a class!</p>
-    </div> -->
+    <table id="classes" class="tables">
+        <tr>
+          <th>Class Name</th>
+          <th>Teacher</th>
+          <!-- <th>Pending Assignments</th> -->
+        </tr>
+    </table>
+    <div class="footer">
+        <p class='foot'>&copy; 2020 CompSci Classroom. All Rights Reserved.</p>
+        <div class="footR">
+          <p id="priv">Privacy Policy</p>
+          <span>|</span>
+          <p id='terms'>Terms of Use</p>
+    
+        </div>
+      </div>
 
   </body>
 </html>

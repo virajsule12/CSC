@@ -373,15 +373,15 @@ ul {
   }
 
   .footer{
-    position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   background-color: #1b3e6e;
-   color: white;
-   /* text-align: center; */
-   display: inline-block;
-   height: auto;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #1b3e6e;
+    color: white;
+    /* text-align: center; */
+    display: inline-block;
+    height: auto;
   }
 
   .foot{
@@ -401,11 +401,26 @@ ul {
 
   #priv{
     display:inline-block;
+    text-decoration: none;
+    
     /* width: 800px; */
+  }
+
+  #priv:hover{
+    text-decoration: underline;
+
+
+  }
+
+  #terms:hover{
+    text-decoration: underline;
+
+
   }
 
   #terms{
     display:inline-block;
+    text-decoration: none;
     /* width: 350px; */
   }
 
@@ -470,6 +485,9 @@ ul {
         Sign Up
       </button>
     </div>
+    <div class="form-group text-center">
+      <a href="http://virajsule.me/index.html" class="signup">Back to Log In</a>
+    </div>
   </div>
 
   <div class="footer">
@@ -477,7 +495,7 @@ ul {
     <div class="footR">
       <p id="priv">Privacy Policy</p>
       <span>|</span>
-      <p id='terms'>Terms of Use</p>
+      <p href='#home' id='terms'>Terms of Use</p>
 
     </div>
 

@@ -169,6 +169,56 @@
 
 
         }
+        .footer{
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: #1b3e6e;
+          color: white;
+          /* text-align: center; */
+          display: inline-block;
+          height: auto;
+        }
+
+        .foot{
+          position: absolute;
+          text-align: left;
+          margin-left: 3em;
+        }
+
+        .footR{
+          float:right;
+          margin-right: 3em;
+          /* width: 1200px; */
+          /* margin: 0px auto -1px auto; */
+          /* padding: 15px; */
+          
+        }
+        #priv{
+          display:inline-block;
+          text-decoration: none;
+          
+          /* width: 800px; */
+        }
+
+        #priv:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms{
+          display:inline-block;
+          text-decoration: none;
+          /* width: 350px; */
+        }
 </style>
   <body bgcolor = "#ffffff" onload="loadClasses()">
 
@@ -195,6 +245,15 @@
         <th>Students</th>
       </tr>
   </table>
+  <div class="footer">
+    <p class='foot'>&copy; 2020 CompSci Classroom. All Rights Reserved.</p>
+    <div class="footR">
+      <p id="priv">Privacy Policy</p>
+      <span>|</span>
+      <p id='terms'>Terms of Use</p>
+
+    </div>
+  </div>
 
   </body>
 </html>
