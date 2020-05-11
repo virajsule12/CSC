@@ -14,7 +14,7 @@
         xhr.open( "GET", "http://virajsule.me:3000/getAllStudents", true ); 
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = 'json';
-        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
         xhr.send(null);
 
         xhr.onreadystatechange = function() {
