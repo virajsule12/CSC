@@ -127,7 +127,8 @@
             // }
     
             function appendCol(numRows, table, text){
-                for(i=0;i<=numRows;i++){
+                var num = document.getElementById('exampleTable').rows.length;
+                for(i=0;i<num;i++){
                     var cell = document.getElementById(table).rows[i].insertCell(-1);
                     let newText = document.createTextNode(text);
                     cell.appendChild(newText);
@@ -212,6 +213,24 @@
                         dropdown.add(option1);
                         dropdown.add(option2);
                         dropdown.add(option3);
+
+                        var table= document.getElementById('exampleTable')
+                        var row = table.insertRow(i);
+                        var cell1 = row.insertCell(0);
+                        
+
+                        var num=i+1
+                        cell1.innerHTML = "Input "+ num + ":";
+
+                        var table2= document.getElementById('testTable')
+                        var row2 = table2.insertRow(i);
+                        var cell2 = row2.insertCell(0);
+                        
+
+                        var num2=i+1
+                        cell2.innerHTML = "Input "+ num2 + ":";
+                        
+                        
     
     
                     }
@@ -301,6 +320,43 @@
                     // appendCol("1",tableNames[0],arr)
                 }
             }
+
+            function testF(){
+                var exIn =[]
+                var exOut=[]
+                var testIn=[]
+                var testOut=[]
+                var table=document.getElementById('exampleTable')
+                // var s="[3,4,5]$$,[6,5]$$,[34,3]$$,"
+                // alert(document.getElementById("exampleTable").rows[0].children.length)
+                // for(i=1;i<document.getElementById("exampleTable").rows[0].children.length;i++){
+                //     exIn.push(document.getElementById('exIn').cells[i].innerText + "$")
+                //     exOut.push(document.getElementById('exOut').cells[i].innerText)
+                //     // alert(document.getElementById('exIn').cells[i].innerText)
+                // }
+
+                
+
+                for(i=0;i<table.rows.length;i++){
+                    var tempArr=[]
+                    for(j=1;j<table.rows[0].children.length;j++){
+                        tempArr.push(table.rows[i].children[j].innerText)
+                    }
+                    exIn.push(tempArr)
+                }
+                
+                // var x=s.split('$$,')
+                // delete x[3]
+                // alert(x[3])
+                // alert(x.length)
+
+                
+    
+                // for(i=1;i<document.getElementById("testTable").rows[0].children.length;i++){
+                //     testIn.push(document.getElementById('testIn').cells[i].innerText)
+                //     testOut.push(document.getElementById('testOut').cells[i].innerText)
+                // }
+            }
     
             function postAssignment(){
                 var cName = document.getElementById('cName').value;
@@ -318,17 +374,35 @@
                 var pTypes=[]
                 var language = 'Javascript'
                 var c = editor.getValue()
+                var exTable = document.getElementById('exampleTable')
+                var testTable = document.getElementById('testTable')
     
                 // alert(getStudentsAssigned());
     
-                for(i=1;i<document.getElementById("exampleTable").rows[0].length;i++){
-                    exIn.push(document.getElementById('exIn').cells[i].innerText)
-                    exOut.push(document.getElementById('exOut').cells[i].innerText)
+                
+
+                for(i=0;i<exTable.rows.length-1;i++){
+                    var tempArr=[]
+                    for(j=1;j<exTable.rows[0].children.length;j++){
+                        tempArr.push(exTable.rows[i].children[j].innerText)
+                    }
+                    exIn.push(tempArr)
                 }
-    
-                for(i=1;i<document.getElementById("testTable").rows[0].length;i++){
-                    testIn.push(document.getElementById('testIn').cells[i].innerText)
-                    testOut.push(document.getElementById('testOut').cells[i].innerText)
+
+                for(i=1;i<exTable.rows[0].children.length;i++){
+                    exOut.push(exTable.rows[exTable.rows.length-1].children[i].innerText)
+                }
+
+                for(i=0;i<testTable.rows.length-1;i++){
+                    var tempArr=[]
+                    for(j=1;j<testTable.rows[0].children.length;j++){
+                        tempArr.push(testTable.rows[i].children[j].innerText)
+                    }
+                    testIn.push(tempArr)
+                }
+
+                for(i=1;i<testTable.rows[0].children.length;i++){
+                    testOut.push(testTable.rows[testTable.rows.length-1].children[i].innerText)
                 }
     
                 // for(i=1;i<document.getElementById("params").rows[0].length;i++){
@@ -355,10 +429,10 @@
                     postC: post,
                     date: date,
                     students: studentsAssigned,
-                    exInput: exIn.toString(),
-                    exeOutput: exOut.toString(),
-                    testInput: testIn.toString(),
-                    testOutput: testOut.toString(),
+                    exInput: exIn,
+                    exOutput: exOut,
+                    testInput: testIn,
+                    testOutput: testOut,
                     numParams: numP,
                     // paramNames: pNames.toString(),
                     // paramTypes: pTypes.toString(),
@@ -559,17 +633,20 @@
             background-color: white;
             border-style: solid;
             border-color: #1b3e6e;
+            outline: none;
             
         }
         table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 40%;
+            outline: none;
         }
         td, th {
             border: 1px solid #1b3e6e;
             text-align: left;
             padding: 8px;
+            outline: none;
 
         }
         ul {
@@ -620,18 +697,36 @@
 
         .iobtn {
             visibility: visible;
-        }  
+        } 
 
-
-        /* .left-element {
+        .containerTable{
+            /* text-align: left; */
+            /* border-style: solid; */
+            /* margin-bottom: 1vw; */
+            background-color: rgb(223, 223, 223);
+            padding: 10px;
             display: inline-block;
-            float: left;
+            position: relative;
+            border-style: solid;
+            /* text-align: center; */
+            width: 50vw;
+        } 
+
+
+        .left-element {
+            /* display: inline-block; */
+            border-style: solid;
+            /* position: absolute; */
+            /* float: left; */
         }
 
         .right-element {
-            display: inline-block;
+            /* float:right; */
+            /* display: inline-block; */
+            border-style: solid;
             
-        }   */
+            
+        }  
 
         .childCheckBox {
             display: inline-block;
@@ -720,6 +815,7 @@
             height: 2vw;
         } */
         
+
         .inputs{
             border-style: solid;
             border-color: #1b3e6e;
@@ -786,6 +882,9 @@
         #compilebtn{
             width: 10vw;
             height: 5vw;
+            border-style: solid;
+            border-color: #1b3e6e;
+            
         }
         #execute{
             width: 20vw;
@@ -896,6 +995,9 @@
         <button id='compilebtn' onclick="compileCode()">Compile</button>
     </div>
     <h4 id="numincorrect">Incorrect Number of Params</h4>
+    <button class="iobtn" id="iotoex" onclick="iotoTables(['exampleTable'])">Add Input/Output to Example Table</button>
+    <button class="iobtn" id="iototest" onclick="iotoTables(['testTable'])">Add Input/Output to Test Table</button>
+    <button class="iobtn" id="iotoboth" onclick="iotoTables(['exampleTable','testTable'])">Add Input/Output to Both Tables</button>
 </div>
     
 
@@ -913,20 +1015,20 @@
         <button class="iobtn" id="iotoboth" onclick="iotoTables(['exampleTable','testTable'])">Add Input/Output to Both Tables</button>
     </div> -->
 
-    <div class='container'>
-        <div class="left-element">
+    <!-- <div class='containerTable'> -->
+        <div class="container">
             <h2 class="x">Example Input/Output:   </h2>
-        </div>
-        <div class="right-element">
+        
             <table class ='tables' id="exampleTable">
-                <tr id="exIn"><td><div>Input:</div>
+                <!-- <tr id="exIn"><td><div>Input:</div> -->
                 <tr id="exOut"><td><div></div>Output:</div>
             </table>
             <br>
             <button onclick="appendCol(1,'exampleTable','')">Add Instance</button>
-        </div>
-        
     </div>
+        
+        
+    
     <br>
     <br>
     <br>
@@ -937,19 +1039,19 @@
         <input class='x' type="TEXT" id="sampleOutput" size="100">
     </div> -->
 
-    <div class='container'>
-        <div class="left-element">
+    
+        <div class="container">
             <h2 class="x">Test Input/Output:   </h2>
-        </div>
-        <div class="right-element">
+        
+       
             <table class ='tables' id="testTable" >
-                <tr id="testIn"><td><div>Input:</div>
+                <!-- <tr id="testIn"><td><div>Input:</div> -->
                 <tr id="testOut"><td><div></div>Output:</div>
             </table>
             <br>
             <button onclick="appendCol(1,'testTable','')">Add Instance</button>
         </div>
-    </div>
+    <!-- </div> -->
 
     <!-- <div class='container'>
         <h2 class="x">Test Output (Students Will Not See This):   </h2>
@@ -1010,6 +1112,7 @@
         </div>
       </div>
     </div>
+    <button onclick="testF()">Hello</button>
     
   </body>
 </html>
