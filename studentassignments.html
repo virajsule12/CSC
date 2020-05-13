@@ -35,6 +35,7 @@ var defaultVal=''
             let progress = result.progress;
             let attempts = result.attempts;
             let times = result.times;
+            let admins = result.admin;
 
             for (var i = 0; i < names.length; i++) {
                 let row = document.getElementById("assnTable").insertRow(i + 1);
@@ -43,8 +44,10 @@ var defaultVal=''
                 let n = row.insertCell(0);
                 n.className = "cell main-cell";
                 n.innerText = names[i];
-                n.addEventListener("click", function() {
+                n.addEventListener("click", function(e) {
+                    localStorage.setItem('currentAssignment', e.target.innerText);
                     window.location.href = "studentsolve.html";
+                    
                 });
 
                 //date
@@ -66,6 +69,11 @@ var defaultVal=''
                 let p = row.insertCell(4);
                 p.className = "cell";
                 p.innerText = progress[i];
+
+                //admin
+                let ad = row.insertCell(5);
+                ad.className = "cell";
+                ad.innerText = admins[i];
 
             }
         });
@@ -174,6 +182,7 @@ var defaultVal=''
             border-collapse: collapse;
             font-size: 20px;
             
+            
         }
         .cell{
             border: 1px solid #dddddd;
@@ -192,6 +201,59 @@ var defaultVal=''
             color: #1B3E6E;
             text-decoration: underline;
             cursor: pointer;
+        }
+
+        .footer{
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: #1b3e6e;
+          color: white;
+          /* text-align: center; */
+          display: inline-block;
+          height: auto;
+          /* margin-top: 50px; */
+
+        }
+
+        .foot{
+          position: absolute;
+          text-align: left;
+          margin-left: 3em;
+        }
+
+        .footR{
+          float:right;
+          margin-right: 3em;
+          /* width: 1200px; */
+          /* margin: 0px auto -1px auto; */
+          /* padding: 15px; */
+          
+        }
+        #priv{
+          display:inline-block;
+          text-decoration: none;
+          
+          /* width: 800px; */
+        }
+
+        #priv:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms{
+          display:inline-block;
+          text-decoration: none;
+          /* width: 350px; */
         }
                 
     </style>
@@ -220,8 +282,20 @@ var defaultVal=''
             <th class = "cell">Due Date</th>
             <th class = "cell">Attempts</th>
             <th class = "cell">Progress</th>
+            <th class = "cell">Teacher</th>
+
             </tr>
       </table>
+
+      <div class="footer">
+        <p class='foot'>&copy; 2020 CompSci Classroom. All Rights Reserved.</p>
+        <div class="footR">
+          <p id="priv">Privacy Policy</p>
+          <span>|</span>
+          <p id='terms'>Terms of Use</p>
+    
+        </div>
+      </div>
 
     </div>
   </body>

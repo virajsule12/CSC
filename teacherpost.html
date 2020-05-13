@@ -38,21 +38,21 @@
             var defaultVal=''
             var initialCode=''
     
-            function clickedClasses(){
-            window.location.href = "http://virajsule.me/classlist.html";
-          }
+        //     function clickedClasses(){
+        //     window.location.href = "http://virajsule.me/classlist.html";
+        //   }
     
-          function clickedPost(){
-            window.location.href = "http://virajsule.me/teacherpost.html";
-          }
+        //   function clickedPost(){
+        //     window.location.href = "http://virajsule.me/teacherpost.html";
+        //   }
     
-          function clickedCreate(){
-            window.location.href = "http://virajsule.me/createclass.html";
-          }
+        //   function clickedCreate(){
+        //     window.location.href = "http://virajsule.me/createclass.html";
+        //   }
     
-          function clickedLogout(){
-            window.location.href = "http://virajsule.me/index.html";
-          }
+        //   function clickedLogout(){
+        //     window.location.href = "http://virajsule.me/index.html";
+        //   }
     
           function onloadFuncs() {
                 setDefault();
@@ -252,6 +252,8 @@
     
             //inserts parameters from table into code editor
             function insParam(){
+                document.getElementById('initBtn').className='notready';
+                document.getElementById('initBtn').disabled='true'
                 if(document.getElementById("params").rows[0].children.length == 1){
                     paramArr.push("")
                 }
@@ -290,10 +292,10 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "http://virajsule.me:3000/execTeacherCode",true);
                 xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.responseType = "json"
+                xhr.responseType = "text"
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("output").innerHTML = this.response.result;
+                        document.getElementById("output").innerHTML = this.responseText;
                     }
                 };
         
@@ -994,13 +996,12 @@
         <div class="header">
             <img src="logo.png" id="logo">
             <ul>
-                <li><a onclick="clickedClasses();">Classes</a></li>
-                <li><a class="active" onclick="clickedPost();">Post Assignment</a></li>
-                <li><a onclick="clickedCreate()">Create Class</a></li>
-                <li><a onclick="clickedLogout()">Logout</a></li>
-              </ul>
-
-        </div>
+              <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
+              <li><a href="http://virajsule.me/teacherassignments.html">View Assignments</a></li>
+              <li><a href="http://virajsule.me/teacherpost.html" class="active">Post Assignment</a></li>
+              <li><a href="http://virajsule.me/index.html">Logout</a></li>
+            </ul>
+          </div>
     <h1 id="heading">Post Assignment</h1>
     <!-- <table>
         <tr><td><div contenteditable>I'm editable</div></td>

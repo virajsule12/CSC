@@ -1,0 +1,449 @@
+<html>
+  <head >
+    <title>Assignments</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+         
+    var defaultVal=''
+    var initialCode=''
+    var assignments = [];
+
+    function onloadFunctions(){
+        createAssignmentOptions();
+    } 
+
+    function getAssignments(callback) {
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getAssignments", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'json';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                callback(this.response);
+            }
+        };
+    }
+
+    function createAssignmentOptions() {
+        getAssignments(function(result) {
+            for(var i = 0; i < result.assignments.length;i++) {
+                let c = document.createElement("option");
+                c.innerText = result.assignments[i];
+                c.value = result.assignments[i];
+                document.getElementById("dropdown").appendChild(c)
+            }
+        });
+    }
+
+    function getAssignmentInfo(assignmentSelected, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://virajsule.me:3000/getTeacherAssignmentData",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.responseType = "json"
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                callback(this.response);
+            }
+        };
+
+        console.log(xhr.send(JSON.stringify({
+            name: (assignmentSelected)
+        })));
+    }
+
+    function createAssignmentTable() {
+        let assignmentSelected = document.getElementById("dropdown").value;
+
+        //erase last assignments
+        let rows = CountRows();
+
+        for (var j = 1; j < rows; j++) {
+            document.getElementById("assnTable").deleteRow(j);
+        }
+
+
+        getAssignmentInfo(assignmentSelected, function(result) {
+            let students = result.students;
+            let datePosted = result.datePosted;
+            let progress = result.progress;
+            let attempts = result.attempts;
+            let dateDue = result.dateDue;
+
+            for (var i = 0; i < students.length; i++) {
+                let row = document.getElementById("assnTable").insertRow(i + 1);
+                
+                //students
+                let s = row.insertCell(0);
+                s.className = "cell main-cell";
+                s.innerText = students[i];
+
+                //progress
+                let p = row.insertCell(1);
+                p.className = "cell";
+                p.innerText = progress[i];
+                switch(progress[i]) {
+                    case "Completed":
+                        p.style.color = "green";
+                        break;
+                    case "In Progress":
+                        p.style.color = "gray";
+                        break;
+                    case "Not Started":
+                        p.style.color = "red";
+                        break;
+                }
+                
+
+                //attempts
+                let a = row.insertCell(2);
+                a.className = "cell";
+                a.innerText = attempts[i];
+
+                //posted date
+                document.getElementById("postdate").innerText = datePosted[i].substring(0, datePosted[i].indexOf("T"));
+
+                //due date
+                document.getElementById("duedate").innerText = dateDue[i].substring(0, dateDue[i].indexOf("T")) + " at " + dateDue[i].substring(dateDue[i].indexOf("T") + 1);
+
+            }
+        });
+
+    }
+
+    function CountRows() {
+        var totalRowCount = 0;
+        var rowCount = 0;
+        var table = document.getElementById("assnTable");
+        var rows = table.getElementsByTagName("tr")
+        for (var i = 0; i < rows.length; i++) {
+            totalRowCount++;
+            if (rows[i].getElementsByTagName("td").length > 0) {
+                rowCount++;
+            }
+        }
+        return totalRowCount;
+    }
+
+    function deleteRow() {
+        document.getElementById("assnTable").deleteRow(1);
+    }
+
+    function chooseAssignment() {
+
+    }   
+
+    </script>
+
+
+    <style type="text/css" media="screen">
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
+        .heading {
+            text-align: center;
+            font-size: 35px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #1b3e6e;
+        }
+
+
+        /*selector*/
+        .selectorDiv {
+            /* text-align: center; */
+            display: flex;
+            flex-direction: row;
+            justify-content:space-between;
+            align-items: center;
+            margin-right: 25px;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #1b3e6e;
+        }
+
+        .select-css {
+            display: block;
+            float: left;
+            font-size: 16px;
+            font-family: sans-serif;
+            font-weight: 700;
+            color: #444;
+            line-height: 1.3;
+            padding: .6em 1.4em .5em .8em;
+            width: fit-content;
+            max-width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            border: 1px solid #aaa;
+            box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+            border-radius: .5em;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+            linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+            background-repeat: no-repeat, repeat;
+            background-position: right .7em top 50%, 0 0;
+            background-size: .65em auto, 100%;
+        }
+        .select-css::-ms-expand {
+            display: none;
+        }
+        .select-css:hover {
+            border-color: #888;
+        }
+        .select-css:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+            box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color: #222;
+            outline: none;
+        }
+        .select-css option {
+            font-weight:normal;
+        }
+
+        /* Support for rtl text, explicit support for Arabic and Hebrew */
+        *[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css {
+            background-position: left .7em top 50%, 0 0;
+            padding: .6em .8em .5em 1.4em;
+        }
+
+        /* Disabled styles */
+        .select-css:disabled, .select-css[aria-disabled=true] {
+            color: graytext;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22graytext%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+            linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+        }
+        .select-css:disabled:hover, .select-css[aria-disabled=true] {
+            border-color: #aaa;
+        }
+
+        /*table*/
+        
+        ul {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+         list-style-type: none;
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+         background-color: #1b3e6e;
+         border-style: solid;
+         border-color: #1b3e6e;
+     }
+     li {
+         float: left;
+     }
+
+     li a {
+         display: block;
+         color: #ffffff;
+         font-weight: bold;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+         border-style: solid;
+         border-color: #1b3e6e;
+         border-width: 2px;
+
+         
+     }
+
+     .active{
+        display: block;
+         color: #1b3e6e;
+         background-color: white;
+         font-weight: bold;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+     }
+
+     li a:hover {
+         background-color: white;
+         color: #1b3e6e;
+     } 
+        
+        .assignments {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .assignments a {
+            text-decoration: underline;
+            font-size: 50px;
+            margin: 10px;
+        }
+
+        .assignment-table {
+            width: 100%;
+            display: flex;
+            position: relative;
+            /* align-items: center; */
+            justify-content: center;
+            border-collapse: collapse;
+            border-spacing: 15px;
+        }
+        .cell, .work-button {
+            text-align: center;
+            /* border: 1px; */
+            border: 1px solid #dddddd;
+            /* padding-right: 40px; */
+            padding-right: 20;
+            padding-left: 20;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            /* width: 100%; */
+            font-size: 20px;
+            
+        }
+
+        .main-cell {
+            color: #1B3E6E;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .work-button {
+            background-color: #1B3E6E;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            line-height: 20px;
+        }   
+        
+        th{
+          font-weight: bold;
+          background-color: #1b3e6e;
+          color: white;
+        }
+        #logo{
+          position: relative;
+          z-index: 100;
+          bottom: 5px;
+        
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px;
+
+
+        }
+        .footer{
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: #1b3e6e;
+          color: white;
+          /* text-align: center; */
+          display: inline-block;
+          height: auto;
+        }
+
+        .foot{
+          position: absolute;
+          text-align: left;
+          margin-left: 3em;
+        }
+
+        .footR{
+          float:right;
+          margin-right: 3em;
+          /* width: 1200px; */
+          /* margin: 0px auto -1px auto; */
+          /* padding: 15px; */
+          
+        }
+        #priv{
+          display:inline-block;
+          text-decoration: none;
+          
+          /* width: 800px; */
+        }
+
+        #priv:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms:hover{
+          text-decoration: underline;
+
+
+        }
+
+        #terms{
+          display:inline-block;
+          text-decoration: none;
+          /* width: 350px; */
+        }
+    </style>
+    
+  </head>
+  <body onload = "onloadFunctions()">
+    
+    <div class="header">
+        <img src="logo.png" id="logo">
+        <ul>
+          <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
+          <li><a href="http://virajsule.me/teacherassignments.html" class="active">View Assignments</a></li>
+          <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
+          <li><a href="http://virajsule.me/index.html">Logout</a></li>
+        </ul>
+      </div>
+    <p class="heading">ASSIGNMENTS</p>
+    <div class = "selectorDiv">
+        <select class = "select-css" id = "dropdown" onchange="createAssignmentTable()">
+            <option value="">Choose an Assignment...</option>
+            <!-- <option value="assignment 1">assignment 1</option>
+            <option value="assignment 2">assignment 2</option> -->
+        </select>
+
+        <p id = "">Date Posted:</p>
+        <label id  = "postdate"></label>
+        <p id = "">Date Due:</p>
+        <label id = "duedate"></label>
+        <!-- <button onclick="deleteRow()">Press</button> -->
+    </div>
+    <table class = "assignment-table" id ="assnTable">
+        <tr>
+          <th class = "cell">Student</th>
+          <th class = "cell">Progress</th>
+          <th class = "cell">Attempts</th>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p class='foot'>&copy; 2020 CompSci Classroom. All Rights Reserved.</p>
+        <div class="footR">
+          <p id="priv">Privacy Policy</p>
+          <span>|</span>
+          <p id='terms'>Terms of Use</p>
+    
+        </div>
+      </div>
+
+  </body>
+</html>

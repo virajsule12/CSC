@@ -41,6 +41,32 @@
     
     }
 
+    function updateTable(name){
+      var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://virajsule.me:3000/updateClassTable",true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = "json"
+        // xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'))
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var code= this.response.code;
+                var count= this.response.students.length;
+                var table=document.getElementById('classes');
+                var row = table.insertRow(table.rows.length);
+                var cell0 = row.insertCell(0)
+                var cell1 = row.insertCell(1);
+                var cell2 = row.insertCell(2);
+                cell0.innerHTML = name
+                cell1.innerHTML = code;
+                cell2.innerHTML = count;
+            }
+        };
+
+        console.log(xhr.send(JSON.stringify({
+            class_name: name
+        })));
+    }
+
 
       function createClass(){
         // alert(localStorage.getItem('cscToken'))
@@ -54,6 +80,7 @@
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById('codeTxt').innerText = "Access Code: " + cCode;
+                updateTable(cName);
             }
         };
 
@@ -219,23 +246,71 @@
           text-decoration: none;
           /* width: 350px; */
         }
+
+        #cName{
+        /* width: 12vw; */
+        height: 3vw;
+        width: 12vw;
+        /* text-transform: uppercase; */
+        font-weight: bold;
+        color: black;
+        font-size: 15px;
+        border-style: solid;
+        /* border-radius: 50px; */
+        text-align: center;
+        border-color: #1b3e6e;
+        outline: none;
+        padding: 1px;
+        
+
+        }
+        #createBtn{
+        width: 12vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        background-color: #1b3e6e;
+        color: white;
+        border-radius: 20px;
+        margin-top: 5px;
+        outline: none;
+        font-size: 12px;
+        line-height: 16px;
+        transition: all 0.3s;
+        font-weight: 400;
+        letter-spacing: 1px;
+        }
+        #createBtn:hover{
+            background-color: #2EE59D;
+            box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+            color: #fff;
+            transform: translateY(-1px);
+        }
 </style>
   <body bgcolor = "#ffffff" onload="loadClasses()">
 
     <div class="header">
       <img src="logo.png" id="logo">
       <ul>
-        <li><a href="http://virajsule.me/classlist.html">Classes</a></li>
-        <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
         <li><a href="http://virajsule.me/createclass.html" class="active">Create Class</a></li>
-        <li><a href="http://virajsule.me/index.html">Logout</a></li>
+          <li><a href="http://virajsule.me/teacherassignments.html">View Assignments</a></li>
+          <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
+          <li><a href="http://virajsule.me/index.html">Logout</a></li>
       </ul>
     </div>
 
-    <h1>Create a Class</h1>
+    <div class="block">
+      <h1>Create a Class</h1>
+      <input type="text" placeholder="Enter Class Name" id="cName">
+      <button onclick="createClass()" id="createBtn">Create Class</button>
+      <p id='codeTxt'></p>
+    </div>
+
+    <!-- <h1>Create a Class</h1>
     <input type="text" placeholder="Enter Class Name" id="cName">
     <button onclick="createClass()">Create Class</button>
-    <p id='codeTxt'></p>
+    <p id='codeTxt'></p> -->
 
     <p id="name">CLASSES</p>
     <table id="classes" class="tables">
