@@ -1,6 +1,6 @@
 <html>
   <head >
-    <title>Assignments</title>
+    <title>CompSci Classroom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
          
@@ -9,8 +9,25 @@
     var assignments = [];
 
     function onloadFunctions(){
+        getUser();
         createAssignmentOptions();
     } 
+
+    function getUser(){
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'text';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('user').innerText=this.responseText;
+            }
+        };
+    }
 
     function getAssignments(callback) {
         var xhr = new XMLHttpRequest();
@@ -87,7 +104,7 @@
                 p.className = "cell";
                 p.innerText = progress[i];
                 switch(progress[i]) {
-                    case "Completed":
+                    case "Complete":
                         p.style.color = "green";
                         break;
                     case "In Progress":
@@ -177,7 +194,8 @@
             color: #444;
             line-height: 1.3;
             padding: .6em 1.4em .5em .8em;
-            width: fit-content;
+            width: 18vw;
+            text-align: center;
             max-width: 100%;
             box-sizing: border-box;
             margin: 0;
@@ -399,6 +417,38 @@
           text-decoration: none;
           /* width: 350px; */
         }
+        #userDiv{
+            position: relative;
+            z-index: 100;
+            /* bottom: 5px; */
+            float: right;
+            margin-right: 2vw;
+            
+            padding: 2px;
+            margin-bottom: 0px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; 
+            margin-top: 8px;           
+
+
+        }
+        #pic{
+            display: inline-block;
+            width: 2vw;
+            height: 2vw;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            filter: invert(100%);
+            /* margin-top: 1vw; */
+        }
+        #user{
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
     </style>
     
   </head>
@@ -411,6 +461,10 @@
           <li><a href="http://virajsule.me/teacherassignments.html" class="active">View Assignments</a></li>
           <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
           <li><a href="http://virajsule.me/index.html">Logout</a></li>
+          <div id="userDiv">
+            <img src="pic.png" id="pic">
+              <p id="user"></p>
+        </div>
         </ul>
       </div>
     <p class="heading">ASSIGNMENTS</p>

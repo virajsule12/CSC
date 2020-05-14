@@ -1,6 +1,6 @@
 <html>
   <head >
-    <title>Simple login</title>
+    <title>CompSci Classroom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
 
@@ -9,8 +9,25 @@ var defaultVal=''
     var assignments = [];
 
     function onloadFunctions(){
+        getUser();
         createAssignments();
     } 
+
+    function getUser(){
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'text';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('user').innerText=this.responseText;
+            }
+        };
+    }
 
     function getAssignmentInfo(callback) {
         var xhr = new XMLHttpRequest();
@@ -255,6 +272,39 @@ var defaultVal=''
           text-decoration: none;
           /* width: 350px; */
         }
+
+        #userDiv{
+            position: relative;
+            z-index: 100;
+            /* bottom: 5px; */
+            float: right;
+            margin-right: 2vw;
+            
+            padding: 2px;
+            margin-bottom: 0px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; 
+            margin-top: 8px;           
+
+
+        }
+        #pic{
+            display: inline-block;
+            width: 2vw;
+            height: 2vw;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            filter: invert(100%);
+            /* margin-top: 1vw; */
+        }
+        #user{
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
                 
     </style>
   </head>
@@ -265,8 +315,12 @@ var defaultVal=''
         <ul>
             <li><a href="http://virajsule.me/joinclass.html">Join a Class</a></li>
             <li><a href="http://virajsule.me/studentassignments.html" class="active">View Assignments</a></li>
-            <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li>
+            <!-- <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li> -->
             <li><a href="http://virajsule.me/index.html">Logout</a></li>
+            <div id="userDiv">
+              <img src="pic.png" id="pic">
+                <p id="user"></p>
+          </div>
           </ul>
     </div>
     </div>

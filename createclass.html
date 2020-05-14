@@ -1,10 +1,11 @@
 <html>
   <head>
-    <title>Simple login</title>
+    <title>CompSci Classroom</title>
   </head>
   <script>
 
     function loadClasses(){
+      getUser()
       var classes;
       var codes;
       var students;
@@ -39,6 +40,22 @@
       };
     
     
+    }
+
+    function getUser(){
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'text';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('user').innerText=this.responseText;
+            }
+        };
     }
 
     function updateTable(name){
@@ -287,6 +304,38 @@
             color: #fff;
             transform: translateY(-1px);
         }
+        #userDiv{
+            position: relative;
+            z-index: 100;
+            /* bottom: 5px; */
+            float: right;
+            margin-right: 2vw;
+            
+            padding: 2px;
+            margin-bottom: 0px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; 
+            margin-top: 8px;           
+
+
+        }
+        #pic{
+            display: inline-block;
+            width: 2vw;
+            height: 2vw;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            filter: invert(100%);
+            /* margin-top: 1vw; */
+        }
+        #user{
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
 </style>
   <body bgcolor = "#ffffff" onload="loadClasses()">
 
@@ -297,6 +346,10 @@
           <li><a href="http://virajsule.me/teacherassignments.html">View Assignments</a></li>
           <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
           <li><a href="http://virajsule.me/index.html">Logout</a></li>
+          <div id="userDiv">
+            <img src="pic.png" id="pic">
+              <p id="user"></p>
+        </div>
       </ul>
     </div>
 

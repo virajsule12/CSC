@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Simple login</title>
+    <title>CompSci Classroom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
     <script type = "text/javascript">
         // $(document).ready(
@@ -55,11 +55,28 @@
         //   }
     
           function onloadFuncs() {
+                getUser();
                 setDefault();
                 // getClassData();
                 fillClass()
             }  
-    
+
+            function getUser(){
+                var xhr = new XMLHttpRequest();
+                // alert(localStorage.getItem('cscToken'));
+                xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.responseType = 'text';
+                xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+                xhr.send(null);
+
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById('user').innerText=this.responseText;
+                    }
+                };
+            }
+        
           function setDefault(){
                 defaultVal = editor.getValue();
             }
@@ -70,6 +87,10 @@
                 var value = objCells.item(col).innerHTML;
                 return value;
             
+            }
+
+            function reset(){
+                window.location.href="http://virajsule.me/teacherpost.html"
             }
     
             function changeTableData(val,row,col,table){
@@ -254,6 +275,7 @@
             function insParam(){
                 document.getElementById('initBtn').className='notready';
                 document.getElementById('initBtn').disabled='true'
+                initialCode=editor.getValue();
                 if(document.getElementById("params").rows[0].children.length == 1){
                     paramArr.push("")
                 }
@@ -339,7 +361,7 @@
 
     
             function postAssignment(){
-                var cName = document.getElementById('cName').value;
+                // var cName = document.getElementById('cName').value;
                 var aName = document.getElementById('name').value
                 var pre = document.getElementById('preC').value
                 var post = document.getElementById('postC').value
@@ -353,7 +375,7 @@
                 var pNames=[]
                 var pTypes=[]
                 var language = 'Javascript'
-                var c = editor.getValue()
+                var c = initialCode
                 var exTable = document.getElementById('exampleTable')
                 var testTable = document.getElementById('testTable')
     
@@ -398,12 +420,18 @@
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         console.log(this.responseText)
-                        // alert(this.responseText)
+                        document.getElementById('compilebtn').className='notready'
+                        document.getElementById('compilebtn').disabled='true'
+                        document.getElementsByClassName('iobtn').className='notready'
+                        document.getElementsByClassName('iobtn').disabled='true'
+                        document.getElementById('postBtn').className='notready'
+                        document.getElementById('postBtn').disabled='true'
+                        document.getElementById('reset').style.visibility='visible'
                     }
                 };
     
                 console.log(xhr.send(JSON.stringify({
-                    className:cName,
+                    // className:cName,
                     assignmentName:aName,
                     preC:pre,
                     postC: post,
@@ -761,6 +789,40 @@
 
 
         }
+        
+        #userDiv{
+            position: relative;
+            z-index: 100;
+            /* bottom: 5px; */
+            float: right;
+            margin-right: 2vw;
+            
+            padding: 2px;
+            margin-bottom: 0px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; 
+            margin-top: 8px;           
+
+
+        }
+        #pic{
+            display: inline-block;
+            width: 2vw;
+            height: 2vw;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            filter: invert(100%);
+            /* margin-top: 1vw; */
+        }
+        #user{
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
+        
         .footer{
           position: absolute;
           left: 0;
@@ -880,6 +942,7 @@
             border-radius: 20px;
             outline: none;
             
+            
 
 
         }
@@ -988,6 +1051,22 @@
             color: #fff;
             transform: translateY(-7px);
         }
+
+        #reset{
+            float: right;
+            background-color: #AF0101;
+            color: white;
+            width: 20vw;
+            height: 3vw;
+            border-radius: 50px;
+            margin-bottom: 50px;
+            font-size: 15px;
+            border-style: solid;
+            border-color: #1b3e6e;
+            visibility: hidden;
+            outline: none;
+        }
+
     
     </style>
   </head>
@@ -995,11 +1074,16 @@
     <div class="pageContainer">
         <div class="header">
             <img src="logo.png" id="logo">
+            
             <ul>
               <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
               <li><a href="http://virajsule.me/teacherassignments.html">View Assignments</a></li>
               <li><a href="http://virajsule.me/teacherpost.html" class="active">Post Assignment</a></li>
               <li><a href="http://virajsule.me/index.html">Logout</a></li>
+              <div id="userDiv">
+                  <img src="pic.png" id="pic">
+                    <p id="user"></p>
+              </div>
             </ul>
           </div>
     <h1 id="heading">Post Assignment</h1>
@@ -1192,6 +1276,8 @@
     <br> -->
     <!-- <input  id="cName" type="text" placeholder="Class Name"> -->
     <button onclick="postAssignment()" id="postBtn">Post Assignment</button>
+
+    
     
 
     <script>
@@ -1201,6 +1287,7 @@
     </script>
     <br>
     <br>
+    <button id="reset" onclick="reset()">Reset</button>
     <br>
     <div class="footer">
         <p class='foot'>&copy; 2020 CompSci Classroom. All Rights Reserved.</p>

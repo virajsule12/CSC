@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Simple login</title>
+    <title>CompSci Classroom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
     <script type = "text/javascript">
         // $(document).ready(
@@ -56,8 +56,26 @@
         // }
 
         function onloadFuncs() {
+            document.getElementById('assignment').innerHTML= localStorage.getItem('currentAssignment')
+            getUser()
             fillAssignmentData();
         }  
+
+        function getUser(){
+        var xhr = new XMLHttpRequest();
+        // alert(localStorage.getItem('cscToken'));
+        xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'text';
+        xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+        xhr.send(null);
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('user').innerText=this.responseText;
+            }
+        };
+    }
 
         function sendBack(){
             window.location.href="http://virajsule.me/studentassignments.html"
@@ -114,6 +132,7 @@
 
                 }
                 
+                console.log(exIn[0].length)
                 for (var j = 0; j < exIn.length; j++) {
                     let row = document.getElementById("exampleTable").insertRow(j);
                     let d = row.insertCell(0);
@@ -127,6 +146,8 @@
                         dp.innerText = exIn[j][i];
                     }
                 }
+
+                console.log(exIn)
 
                 let outRow = document.getElementById("exampleTable").insertRow(exIn.length);
                 let f = outRow.insertCell(0);
@@ -269,6 +290,7 @@
             margin-bottom: 1vw;
             background-color: rgb(223, 223, 223);
             padding: 10px;
+            margin-top: 1vw;
             
             
         }
@@ -341,6 +363,7 @@
          background-color: #1b3e6e;
          border-style: solid;
          border-color: #1b3e6e;
+         
         }
         li {
             float: left;
@@ -704,6 +727,38 @@
             visibility: hidden;
             outline: none;
         }
+        #userDiv{
+            position: relative;
+            z-index: 100;
+            /* bottom: 5px; */
+            float: right;
+            margin-right: 2vw;
+            
+            padding: 2px;
+            margin-bottom: 0px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; 
+            margin-top: 8px;           
+
+
+        }
+        #pic{
+            display: inline-block;
+            width: 2vw;
+            height: 2vw;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            filter: invert(100%);
+            /* margin-top: 1vw; */
+        }
+        #user{
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
     
     </style>
   </head>
@@ -714,14 +769,18 @@
             <ul>
                 <li><a href="http://virajsule.me/joinclass.html">Join a Class</a></li>
                 <li><a href="http://virajsule.me/studentassignments.html">View Assignments</a></li>
-                <li><a href="http://virajsule.me/studentsolve.html" class="active">Work on Assignments</a></li>
+                <li><a id="assignment" href="http://virajsule.me/studentsolve.html" class="active">Assignment</a></li>
                 <li><a href="http://virajsule.me/index.html">Logout</a></li>
+                <div id="userDiv">
+                    <img src="pic.png" id="pic">
+                      <p id="user"></p>
+                </div>
               </ul>
     
         </div>
 
         
-    <h1 id="heading">Work on Assignment</h1>
+    <!-- <h1 id="heading">Work on Assignment</h1> -->
     <!-- <table>
         <tr><td><div contenteditable>I'm editable</div></td>
         <td><div contenteditable>I'm also editable</div></td></tr>
