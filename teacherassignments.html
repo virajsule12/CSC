@@ -16,7 +16,7 @@
     function getUser(){
         var xhr = new XMLHttpRequest();
         // alert(localStorage.getItem('cscToken'));
-        xhr.open( "GET", "http://virajsule.me:3000/getUser", true ); 
+        xhr.open( "GET", "http://virajsule.me:3000/getTeacherUser", true ); 
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = 'text';
         xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
@@ -64,6 +64,7 @@
         xhr.responseType = "json"
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
+                console.log(this.response)
                 callback(this.response);
             }
         };
@@ -79,8 +80,10 @@
         //erase last assignments
         let rows = CountRows();
 
-        for (var j = 1; j < rows; j++) {
-            document.getElementById("assnTable").deleteRow(j);
+        var j = 0;
+        while (j < rows-1) {
+            document.getElementById("assnTable").deleteRow(1);
+            j++;
         }
 
 

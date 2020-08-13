@@ -35,16 +35,19 @@ function clickedTeacher(){
 }
 
 function create(){
+  var first = document.getElementById('first').value;
+  var last = document.getElementById('last').value;
+  var email = document.getElementById('email').value
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
   var cPassword = document.getElementById('confirmPassword').value;
 
     if(password == cPassword){
         if(activeS){
-            createStudent(username,password);
+            createStudent(username,password,first,last,email);
         }
         else{
-            createTeacher(username,password);
+            createTeacher(username,password,first,last,email);
         }
     }
     else{
@@ -53,7 +56,7 @@ function create(){
 
 }
 
-function createStudent(uIn,pIn){
+function createStudent(uIn,pIn,first,last,email){
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://virajsule.me:3000/createstudent",true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -69,11 +72,14 @@ function createStudent(uIn,pIn){
   console.log(xhr.send(JSON.stringify({
       user_name: uIn,
       password: pIn,
+      first: first,
+      last: last,
+      email: email,
       code: ""
   })));
 }
 
-function createTeacher(uIn,pIn){
+function createTeacher(uIn,pIn,first,last,email){
     console.log('asdf')
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://virajsule.me:3000/createteacher",true);
@@ -93,7 +99,10 @@ function createTeacher(uIn,pIn){
 
   console.log(xhr.send(JSON.stringify({
       user_name: uIn,
-      password: pIn
+      password: pIn,
+      first: first,
+      last: last,
+      email: email
   })));
 }
 
@@ -168,6 +177,11 @@ body {
   margin: 6em auto;
   color: #08063e;
   margin-top: 11em;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .form-signin .title {
@@ -466,6 +480,10 @@ ul {
 
       <div class="form-group">
         <input name="last" class="form-control" placeholder="Last Name" value="" autofocus="autofocus" type="text" id="last" required="required">
+      </div>
+
+      <div class="form-group">
+        <input name="email" class="form-control" placeholder="Email" value="" autofocus="autofocus" type="text" id="email" required="required">
       </div>
 
     <div class="form-group">
