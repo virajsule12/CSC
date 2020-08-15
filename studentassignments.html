@@ -24,7 +24,7 @@ var defaultVal=''
 
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById('user').innerText=this.responseText;
+                document.getElementById('user').innerText="Signed in as: " + this.responseText;
             }
         };
     }
@@ -53,6 +53,7 @@ var defaultVal=''
             let attempts = result.attempts;
             let times = result.times;
             let admins = result.admin;
+            let adminNames = result.adminNames;
 
             for (var i = 0; i < names.length; i++) {
                 let row = document.getElementById("assnTable").insertRow(i + 1);
@@ -63,6 +64,7 @@ var defaultVal=''
                 n.innerText = names[i];
                 n.addEventListener("click", function(e) {
                     localStorage.setItem('currentAssignment', e.target.innerText);
+                    localStorage.setItem("admin",  admins[e.target.parentNode.rowIndex]);
                     window.location.href = "studentsolve.html";
                     
                 });
@@ -89,8 +91,9 @@ var defaultVal=''
 
                 //admin
                 let ad = row.insertCell(5);
+                name = adminNames[i];
                 ad.className = "cell";
-                ad.innerText = admins[i];
+                ad.innerText = name.substring(0,1) + ". " + name.substring(name.indexOf(" ") + 1);
 
             }
         });
@@ -106,6 +109,11 @@ var defaultVal=''
             font-family: Arial, Helvetica, sans-serif;
             
         }
+
+        body {
+          margin: 0;
+        } 
+        
         .heading {
             text-align: center;
           font-weight: bold;
@@ -157,23 +165,6 @@ var defaultVal=''
          background-color: white;
          color: #1b3e6e;
      } 
-
-        #logo{
-          position: relative;
-          z-index: 100;
-          bottom: 5px;
-        
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-left: auto;
-          margin-right: auto;
-          width: 150px;
-          height: 50px;
-
-
-        }
 
         .assignments {
             position: relative;
@@ -298,31 +289,118 @@ var defaultVal=''
             filter: invert(100%);
             /* margin-top: 1vw; */
         }
-        #user{
+        #user {
             display: inline-block;
             color: white;
             font-size: 20px;
             margin: 0px;
             
         }
+ 
+        .userStuff {
+            /* display: inline-block; */
+            float: right;
+            color: white;
+            font-size: 20px;
+            /* margin: 0px; */
+            margin: 0px 20px;
+            vertical-align: middle;
+            /* padding: 10px 10px; */
+            position: relative;
+            /* z-index: 0; */
+        }
+ 
+        div.container {
+            position: sticky;
+            top: 0px;
+            font-family: 'Lato';
+            font-size: 1rem;
+            background: #1B3E6E;
+            padding: 1rem 1rem;
+            /* text-align: center; */
+            opacity: 1;
+        }
+ 
+        div.container a {
+            color: #f6f7f9;
+            /* font-family: "Raleway"; */
+            text-decoration: none;
+            margin: 0px 10px;
+            padding: 10px 10px;
+            position: relative;
+            z-index: 0;
+        }
+ 
+        div.navbar a:before, div.navbar a:after {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            height: 2px;
+            background: #f6f7f9;
+            content: "";
+            opacity: 0;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+ 
+        div.navbar a:before
+        {
+            top: 0px;
+            transform: translateY(10px);
+        }
+ 
+        div.navbar a:after
+        {
+            bottom: 0px;
+            transform: translateY(-10px);
+        }
+ 
+        div.navbar a:hover:before, div.navbar a:hover:after
+        {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+ 
+        #lgOut {
+            color: #ff4d4d;
+        }
+ 
+        #logo{
+          /* position: relative; */
+          /* z-index: 100;
+          bottom: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px; */
+            align-content: left;
+            width: 50px;
+            height: 20px;
+ 
+        }
+
                 
     </style>
   </head>
   <body onload = "onloadFunctions()" bgcolor = "#FFFFFF">
 
-    <div class="header">
-        <img src="logo.png" id="logo">
-        <ul>
-            <li><a href="http://virajsule.me/joinclass.html">Join a Class</a></li>
-            <li><a href="http://virajsule.me/studentassignments.html" class="active">View Assignments</a></li>
-            <!-- <li><a href="http://virajsule.me/studentsolve.html">Work on Assignments</a></li> -->
-            <li><a href="http://virajsule.me/index.html">Logout</a></li>
-            <div id="userDiv">
-              <img src="pic.png" id="pic">
-                <p id="user"></p>
-          </div>
-          </ul>
-    </div>
+    <div class = "container">
+      <!-- <button class = "button"><span>=</span></button> -->
+      <div class="navbar">
+          <img src = "goodlogo.png" id = "logo">
+          <a href="http://virajsule.me/joinclass.html"><b>Join Class</b></a>
+          <a href="http://virajsule.me/studentassignments.html"><b>View Assignments</b></a>
+       
+        
+        <!-- <img src="pic.png" id="pic"> -->
+        <p id="user" class = "userStuff">Username</p>
+        <a href = "http://virajsule.me/index.html" id = "lgOut"><b>Logout</b></a>
+      </div>
+  </div>
+
     </div>
       <p class="heading">ASSIGNMENTS</p>
       <div class = "assignments" id = "assignmentView">
