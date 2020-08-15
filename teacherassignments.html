@@ -24,7 +24,8 @@
 
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById('user').innerText=this.responseText;
+                document.getElementById('user').innerText="Signed in as: " + this.responseText;
+
             }
         };
     }
@@ -354,22 +355,7 @@
           background-color: #1b3e6e;
           color: white;
         }
-        #logo{
-          position: relative;
-          z-index: 100;
-          bottom: 5px;
         
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-left: auto;
-          margin-right: auto;
-          width: 150px;
-          height: 50px;
-
-
-        }
         .footer{
           position: absolute;
           left: 0;
@@ -445,31 +431,126 @@
             filter: invert(100%);
             /* margin-top: 1vw; */
         }
-        #user{
+        /*Navigation*/
+ body {
+       padding: 0;
+       margin: 0%;
+     	  }
+ 
+        #user {
             display: inline-block;
             color: white;
             font-size: 20px;
             margin: 0px;
             
         }
+ 
+        .userStuff {
+            /* display: inline-block; */
+            float: right;
+            color: white;
+            font-size: 20px;
+            /* margin: 0px; */
+            margin: 0px 20px;
+            vertical-align: middle;
+            /* padding: 10px 10px; */
+            position: relative;
+            /* z-index: 0; */
+        }
+ 
+        div.container {
+            position: sticky;
+            top: 0px;
+            font-family: 'Lato';
+            font-size: 1rem;
+            background: #1B3E6E;
+            padding: 1rem 1rem;
+            /* text-align: center; */
+            opacity: 1;
+        }
+ 
+        div.container a {
+            color: #f6f7f9;
+            /* font-family: "Raleway"; */
+            text-decoration: none;
+            margin: 0px 10px;
+            padding: 10px 10px;
+            position: relative;
+            z-index: 0;
+        }
+ 
+        div.navbar a:before, div.navbar a:after {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            height: 2px;
+            background: #f6f7f9;
+            content: "";
+            opacity: 0;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+ 
+        div.navbar a:before
+        {
+            top: 0px;
+            transform: translateY(10px);
+        }
+ 
+        div.navbar a:after
+        {
+            bottom: 0px;
+            transform: translateY(-10px);
+        }
+ 
+        div.navbar a:hover:before, div.navbar a:hover:after
+        {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+ 
+        #lgOut {
+            color: #ff4d4d;
+        }
+ 
+        #logo{
+          /* position: relative; */
+          /* z-index: 100;
+          bottom: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px; */
+            align-content: left;
+            width: 50px;
+            height: 20px;
+ 
+        }
+
     </style>
     
   </head>
   <body onload = "onloadFunctions()">
     
-    <div class="header">
-        <img src="logo.png" id="logo">
-        <ul>
-          <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
-          <li><a href="http://virajsule.me/teacherassignments.html" class="active">View Assignments</a></li>
-          <li><a href="http://virajsule.me/teacherpost.html">Post Assignment</a></li>
-          <li><a href="http://virajsule.me/index.html">Logout</a></li>
-          <div id="userDiv">
-            <img src="pic.png" id="pic">
-              <p id="user"></p>
+    <div class = "container">
+        <!-- <button class = "button"><span>=</span></button> -->
+        <div class="navbar">
+            <img src = "goodlogo.png" id = "logo">
+            <a href="http://virajsule.me/teacherclassview.html"><b>View Classes</b></a>
+            <a href="http://virajsule.me/createclass.html"><b>Create Class</b></a>
+          <a href="http://virajsule.me/teacherassignments.html"><b>View Assignments</b></a>
+          <a href="http://virajsule.me/teacherpost.html"><b>Post Assignment</b></a>
+ 
+          
+          <!-- <img src="pic.png" id="pic"> -->
+          <p id="user" class = "userStuff">Username</p>
+          <a href = "http://virajsule.me/index.html" id = "lgOut"><b>Logout</b></a>
         </div>
-        </ul>
-      </div>
+    </div>
+
     <p class="heading">ASSIGNMENTS</p>
     <div class = "selectorDiv">
         <select class = "select-css" id = "dropdown" onchange="createAssignmentTable()">

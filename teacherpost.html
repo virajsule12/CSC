@@ -2,41 +2,11 @@
   <head>
     <title>CompSci Classroom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script type = "text/javascript">
-        // $(document).ready(
-        //     function() {
-        //         alert("hello");
-        //         //clicking the parent checkbox should check or uncheck all child checkboxes
-        //         $('.parentCheckBox').click(
-        //             function() {
-        //                 $(this).parents('fieldset:eq(0)').find('.childCheckBox').attr('checked', this.checked);
-        //                 alert("click");
-        //             }
-        //         );
-        //         //clicking the last unchecked or checked checkbox should check or uncheck the parent checkbox
-        //         $('.childCheckBox').click(
-        //             function() {
-        //                 if ($(this).parents('fieldset:eq(0)').find('.parentCheckBox').attr('checked') == true && this.checked == false)
-        //                     $(this).parents('fieldset:eq(0)').find('.parentCheckBox').attr('checked', false);
-        //                 if (this.checked == true) {
-        //                     var flag = true;
-        //                     $(this).parents('fieldset:eq(0)').find('.childCheckBox').each(
-        //                         function() {
-        //                             if (this.checked == false)
-        //                                 flag = false;
-        //                         }
-        //                     );
-        //                     $(this).parents('fieldset:eq(0)').find('.parentCheckBox').attr('checked', flag);
-        //                 }
-        //             }
-        //         );
-        //     }
-        // );
-        </script>
+    
         <script>
              
-            var defaultVal=''
-            var initialCode=''
+            var defaultVal='';
+            var initialCode='';
     
         //     function clickedClasses(){
         //     window.location.href = "http://virajsule.me/classlist.html";
@@ -61,7 +31,7 @@
                 fillClass()
             }  
 
-            function getUser(){
+        function getUser(){
                 var xhr = new XMLHttpRequest();
                 // alert(localStorage.getItem('cscToken'));
                 xhr.open( "GET", "http://virajsule.me:3000/getTeacherUser", true ); 
@@ -72,10 +42,11 @@
 
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById('user').innerText=this.responseText;
-                    }
+                        document.getElementById('user').innerText="Signed in as: " + this.responseText;
+
                 };
-            }   
+            }
+        }   
         
           function setDefault(){
                 defaultVal = editor.getValue();
@@ -522,67 +493,62 @@
             // var classNames = ["class1", "class2", "class3"];
     
             function fillClass() {
-                let p = document.getElementById("selector");
-                
-                getClassData(function(result) {
-                    let classes = result.students;
-                    let classNames = result.classes;
-    
-                    for (var i = 0; i < classes.length; i++) {
-                        let f = document.createElement("fieldset");
-                        let c = document.createElement("input");
-                        c.type = "checkbox";
-                        c.className = 'parentCheckBox';
-                        c.innerText = classNames[i]; 
-                        let l = document.createElement("label");
-                        l.innerText = classNames[i];
-                        l.className = "labels";
-                        l.style.color = "#1b3e6e";
-                        l.style.fontWeight = 800;
-                        f.appendChild(c);
-                        c.addEventListener("click", function(e) {
-                            if (e.target.checked) {
-                                let child = e.target.parentElement.children;
-                                for(var i = 0; i < child.length; i++) {
-                                    child[i].checked = true;
-                                }
+            let p = document.getElementById("selector");
+            
+            getClassData(function(result) {
+                let classes = result.students;
+                let classNames = result.classes;
+
+                for (var i = 0; i < classes.length; i++) {
+                    let f = document.createElement("fieldset");
+                    let c = document.createElement("input");
+                    c.type = "checkbox";
+                    c.className = 'parentCheckBox';
+                    c.innerText = classNames[i]; 
+                    let l = document.createElement("label");
+                    l.innerText = classNames[i];
+                    l.className = "labels";
+                    l.style.color = "#1b3e6e";
+                    l.style.fontWeight = 800;
+                    f.appendChild(c);
+                    c.addEventListener("click", function(e) {
+                        if (e.target.checked) {
+                            let child = e.target.parentElement.children;
+                            for(var i = 0; i < child.length; i++) {
+                                child[i].checked = true;
                             }
-                        });
+                        }
+                    });
+                    f.appendChild(l);
+                    f.appendChild(document.createElement("br"));
+                    
+                    for (var j = 0; j < classes[i].length; j++) {
+                        let s = document.createElement("input");
+                        s.type = "checkbox";
+                        s.className = 'childCheckBox';
+                        s.innerText = classes[i][j];
+                        let l = document.createElement("label");
+                        l.innerText = classes[i][j];
+                        l.className = "labels";
+                        f.appendChild(s);
                         f.appendChild(l);
                         f.appendChild(document.createElement("br"));
                         
-                        for (var j = 0; j < classes[i].length; j++) {
-                            let s = document.createElement("input");
-                            s.type = "checkbox";
-                            s.className = 'childCheckBox';
-                            s.innerText = classes[i][j];
-                            let l = document.createElement("label");
-                            l.innerText = classes[i][j];
-                            l.className = "labels";
-                            f.appendChild(s);
-                            f.appendChild(l);
-                            f.appendChild(document.createElement("br"));
-                            
-                        }
-                        p.appendChild(f);
                     }
-                });
-                
-            }
-
-            // function AvoidSpace(event) {
-            //     var k = event ? event.which : window.event.keyCode;
-            //     if (k == 32) return false;
-            // }
-    
-            //JQUERY
+                    p.appendChild(f);
+                }
+            });
             
-        
+        }
+            
         </script>
 
 
     <style type="text/css" media="screen">
-
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
         h2 {
             font-size: 25px;
             font-weight: 700;
@@ -772,23 +738,7 @@
          .parentCheckBox {
             display: inline-block;
         }
-        #logo{
-          position: relative;
-          z-index: 100;
-          bottom: 5px;
         
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-left: auto;
-          margin-right: auto;
-          width: 150px;
-          height: 60px;
-          
-
-
-        }
         
         #userDiv{
             position: relative;
@@ -1066,26 +1016,127 @@
             visibility: hidden;
             outline: none;
         }
+        
+        /*Navigation*/
+        body {
+            padding: 0;
+            margin: 0%;
+     	}
+ 
+        #user {
+            display: inline-block;
+            color: white;
+            font-size: 20px;
+            margin: 0px;
+            
+        }
+ 
+        .userStuff {
+            /* display: inline-block; */
+            float: right;
+            color: white;
+            font-size: 20px;
+            /* margin: 0px; */
+            margin: 0px 20px;
+            vertical-align: middle;
+            /* padding: 10px 10px; */
+            position: relative;
+            /* z-index: 0; */
+        }
+ 
+        div.cont {
+            position: sticky;
+            top: 0px;
+            font-family: 'Lato';
+            font-size: 1rem;
+            background: #1B3E6E;
+            padding: 1rem 1rem;
+            /* text-align: center; */
+            opacity: 1;
+        }
+ 
+        div.cont a {
+            color: #f6f7f9;
+            /* font-family: "Raleway"; */
+            text-decoration: none;
+            margin: 0px 10px;
+            padding: 10px 10px;
+            position: relative;
+            z-index: 0;
+        }
+ 
+        div.navbar a:before, div.navbar a:after {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            height: 2px;
+            background: #f6f7f9;
+            content: "";
+            opacity: 0;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+ 
+        div.navbar a:before
+        {
+            top: 0px;
+            transform: translateY(10px);
+        }
+ 
+        div.navbar a:after
+        {
+            bottom: 0px;
+            transform: translateY(-10px);
+        }
+ 
+        div.navbar a:hover:before, div.navbar a:hover:after
+        {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+ 
+        #lgOut {
+            color: #ff4d4d;
+        }
+ 
+        #logo{
+          /* position: relative; */
+          /* z-index: 100;
+          bottom: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: auto;
+          margin-right: auto;
+          width: 150px;
+          height: 50px; */
+            align-content: left;
+            width: 50px;
+            height: 20px;
+ 
+        }
 
     
     </style>
   </head>
   <body onload="onloadFuncs()">
     <div class="pageContainer">
-        <div class="header">
-            <img src="logo.png" id="logo">
-            
-            <ul>
-              <li><a href="http://virajsule.me/createclass.html">Create Class</a></li>
-              <li><a href="http://virajsule.me/teacherassignments.html">View Assignments</a></li>
-              <li><a href="http://virajsule.me/teacherpost.html" class="active">Post Assignment</a></li>
-              <li><a href="http://virajsule.me/index.html">Logout</a></li>
-              <div id="userDiv">
-                  <img src="pic.png" id="pic">
-                    <p id="user"></p>
-              </div>
-            </ul>
-          </div>
+        <div class = "cont">
+        <!-- <button class = "button"><span>=</span></button> -->
+        <div class="navbar">
+            <img src = "goodlogo.png" id = "logo">
+            <a href="http://virajsule.me/teacherclassview.html"><b>View Classes</b></a>
+            <a href="http://virajsule.me/createclass.html"><b>Create Class</b></a>
+          <a href="http://virajsule.me/teacherassignments.html"><b>View Assignments</b></a>
+          <a href="http://virajsule.me/teacherpost.html"><b>Post Assignment</b></a>
+ 
+          
+          <!-- <img src="pic.png" id="pic"> -->
+          <p id="user" class = "userStuff">Username</p>
+          <a href = "http://virajsule.me/index.html" id = "lgOut"><b>Logout</b></a>
+        </div>
+    </div>
+
     <h1 id="heading">Post Assignment</h1>
     <!-- <table>
         <tr><td><div contenteditable>I'm editable</div></td>
