@@ -94,7 +94,8 @@
         };
 
         console.log(xhr.send(JSON.stringify({
-            aName: localStorage.getItem('currentAssignment')
+            aName: localStorage.getItem('currentAssignment'),
+            admin: localStorage.getItem('admin')
             
             })));
         }

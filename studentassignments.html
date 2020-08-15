@@ -64,7 +64,8 @@ var defaultVal=''
                 n.innerText = names[i];
                 n.addEventListener("click", function(e) {
                     localStorage.setItem('currentAssignment', e.target.innerText);
-                    localStorage.setItem("admin",  admins[e.target.parentNode.rowIndex]);
+                    localStorage.setItem("admin",  admins[e.target.parentNode.rowIndex - 1]);
+                    // console.log(admins[e.target.parentNode.rowIndex-1])
                     window.location.href = "studentsolve.html";
                     
                 });
@@ -390,7 +391,7 @@ var defaultVal=''
     <div class = "container">
       <!-- <button class = "button"><span>=</span></button> -->
       <div class="navbar">
-          <img src = "goodlogo.png" id = "logo">
+          <img src = "goodLogo.png" id = "logo">
           <a href="http://virajsule.me/joinclass.html"><b>Join Class</b></a>
           <a href="http://virajsule.me/studentassignments.html"><b>View Assignments</b></a>
        
