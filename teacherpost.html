@@ -360,7 +360,7 @@
                 getAssignments(function(result) {
                     let met = true;
 
-                    if(document.getElementById("name").value = "") {
+                    if(document.getElementById("name").value == "") {
                         met = false;
                         alert("You need to give your assignment a name.");
                     }
@@ -368,6 +368,7 @@
                         met = false;
                         alert("You have to assign at least one student this assignment");
                     }
+
                     for(i = 0; i < result.assignments.length; i++) {
                         
                         let a = result.assignments;
