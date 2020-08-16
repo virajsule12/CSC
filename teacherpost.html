@@ -46,6 +46,22 @@
 
                 };
             }
+        }
+
+        function getAssignments(callback) {
+            var xhr = new XMLHttpRequest();
+            // alert(localStorage.getItem('cscToken'));
+            xhr.open( "GET", "http://virajsule.me:3000/getAssignments", true ); 
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Authorization','Bearer ' + localStorage.getItem('cscToken'));
+            xhr.send(null);
+
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    callback(this.response);
+                }
+            };
         }   
         
           function setDefault(){
@@ -330,6 +346,49 @@
                 }
             }
 
+            function submit() {
+                if(document.getElementById("name").innerHTML = "") {
+                    alert("You need to give your assignment a name.");
+                }
+                else if (dupCheck()) {
+                    alert("You already created an assignment with that name")
+                }
+                else if (!studentsSelected()) {
+                    alert("You have to assign at least one student this assignment");
+                }
+                else {
+                    postAssignment();
+                }
+            }
+
+            function studentsSelected() {
+                let p = document.getElementById("selector");
+                alert(p.children.length);
+                for(i = 0; i < p.children.length; i++) {
+                    let pp = p.children[i];
+                    for(j = 0; j < pp.children.length; j++) {
+                        // alert(p.children[i].children[j].type);
+                        // alert("hello");
+                        if (pp.children[j].checked) {
+                            alert("yes");
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            function dupCheck() {
+                getAssignments(function(result) {
+                    for(i = 0; i < result.length; i++) {
+                        if(result[i] == document.getElementById("name").innerHTML) {
+                            alert("dup");
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
     
             function postAssignment(){
                 // var cName = document.getElementById('cName').value;
@@ -493,7 +552,10 @@
             // var classNames = ["class1", "class2", "class3"];
     
             function fillClass() {
-            let p = document.getElementById("selector");
+                let p = document.getElementById("selector");
+                let n = document.createElement("label");
+                n.innerText = "*Click on the class name to expand";
+                p.appendChild(n);
             
             getClassData(function(result) {
                 let classes = result.students;
@@ -505,12 +567,15 @@
                     c.type = "checkbox";
                     c.className = 'parentCheckBox';
                     c.innerText = classNames[i]; 
+                    c.id = classNames[i];
                     let l = document.createElement("label");
                     l.innerText = classNames[i];
                     l.className = "labels";
+                    l.style.cursor = "pointer";
                     l.style.color = "#1b3e6e";
                     l.style.fontWeight = 800;
                     f.appendChild(c);
+                    f.appendChild(l);
                     c.addEventListener("click", function(e) {
                         if (e.target.checked) {
                             let child = e.target.parentElement.children;
@@ -519,8 +584,24 @@
                             }
                         }
                     });
-                    f.appendChild(l);
-                    f.appendChild(document.createElement("br"));
+                    l.addEventListener("click", function(e) {
+                        let child = e.target.parentElement.children;
+                        // alert(e.target.innerText);
+                        for(var i = 0; i < child.length; i++) {
+                            if (child[i].className == "childCheckBox") {
+                                child[i].className = "b";
+                            }
+                            else {
+                                if (child[i].className == "b") {
+                                    child[i].className = "childCheckBox";
+                                }
+                            }
+                        }
+                    });
+                  
+                    let b = document.createElement("br");
+                    b.className = "childCheckBox";
+                    f.appendChild(b);
                     
                     for (var j = 0; j < classes[i].length; j++) {
                         let s = document.createElement("input");
@@ -529,10 +610,12 @@
                         s.innerText = classes[i][j];
                         let l = document.createElement("label");
                         l.innerText = classes[i][j];
-                        l.className = "labels";
+                        l.className = "childCheckBox";
                         f.appendChild(s);
                         f.appendChild(l);
-                        f.appendChild(document.createElement("br"));
+                        let b = document.createElement("br");
+                        b.className = "childCheckBox";
+                        f.appendChild(b);
                         
                     }
                     p.appendChild(f);
@@ -733,7 +816,7 @@
         }  
 
         .childCheckBox {
-            display: inline-block;
+            display: none;
         } 
          .parentCheckBox {
             display: inline-block;
@@ -1326,7 +1409,7 @@
     <p id="output">Output:</p>
     <br> -->
     <!-- <input  id="cName" type="text" placeholder="Class Name"> -->
-    <button onclick="postAssignment()" id="postBtn">Post Assignment</button>
+    <button onclick="submit()" id="postBtn">Post Assignment</button>
 
     
     
