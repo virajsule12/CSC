@@ -94,6 +94,7 @@
             let progress = result.progress;
             let attempts = result.attempts;
             let dateDue = result.dateDue;
+            let names = result.names;
 
             for (var i = 0; i < students.length; i++) {
                 let row = document.getElementById("assnTable").insertRow(i + 1);
@@ -101,7 +102,7 @@
                 //students
                 let s = row.insertCell(0);
                 s.className = "cell main-cell";
-                s.innerText = students[i];
+                s.innerText = names[i];
 
                 //progress
                 let p = row.insertCell(1);
