@@ -66,6 +66,16 @@
         
           function setDefault(){
                 defaultVal = editor.getValue();
+                var today = new Date();
+                var date = today.getFullYear()+'-'
+                if(today.getMonth()+1 < 10) {
+                    date += "0" + (today.getMonth()+1)+'-'+today.getDate();
+                }
+                else {
+                    date += (today.getMonth()+1)+'-'+today.getDate();
+                }
+                document.getElementById('due-date').value = date + "T23:59";
+
             }
     
             function getTableData(row,col,table) {
@@ -347,30 +357,44 @@
             }
 
             function submit() {
-                if(document.getElementById("name").innerHTML = "") {
-                    alert("You need to give your assignment a name.");
-                }
-                else if (dupCheck()) {
-                    alert("You already created an assignment with that name")
-                }
-                else if (!studentsSelected()) {
-                    alert("You have to assign at least one student this assignment");
-                }
-                else {
-                    postAssignment();
-                }
+                getAssignments(function(result) {
+                    let met = true;
+
+                    if(document.getElementById("name").innerHTML = "") {
+                        met = false;
+                        alert("You need to give your assignment a name.");
+                    }
+                    else if (!studentsSelected()) {
+                        met = false;
+                        alert("You have to assign at least one student this assignment");
+                    }
+                    for(i = 0; i < result.assignments.length; i++) {
+                        
+                        let a = result.assignments;
+                        if(a[i] == document.getElementById("name").value) {
+                            met = false;
+                            alert("You already have an assignment with this name")
+                            
+                        }
+                    }
+
+                    if (met) {
+                        postAssignment();
+                    }
+                    
+                });
             }
 
             function studentsSelected() {
                 let p = document.getElementById("selector");
-                alert(p.children.length);
+                // alert(p.children.length);
                 for(i = 0; i < p.children.length; i++) {
                     let pp = p.children[i];
                     for(j = 0; j < pp.children.length; j++) {
                         // alert(p.children[i].children[j].type);
                         // alert("hello");
                         if (pp.children[j].checked) {
-                            alert("yes");
+                            // alert("yes");
                             return true;
                         }
                     }
@@ -379,15 +403,7 @@
             }
 
             function dupCheck() {
-                getAssignments(function(result) {
-                    for(i = 0; i < result.length; i++) {
-                        if(result[i] == document.getElementById("name").innerHTML) {
-                            alert("dup");
-                            return true;
-                        }
-                    }
-                    return false;
-                });
+                
             }
     
             function postAssignment(){
@@ -539,8 +555,8 @@
                 for (var i = 0; i < field.length; i++) {
                     let students = field[i].children;
                     for (var j = 0; j < students.length; j++) {
-                        if (students[j].className == "childCheckBox" && students[j].checked) {
-                            studentsAssigned += students[j+1].innerText;
+                        if (students[j].name == "student" && students[j].checked) {
+                            studentsAssigned += students[j].innerText;
                             studentsAssigned += ",";
                         }
                     }
@@ -608,6 +624,7 @@
                         s.type = "checkbox";
                         s.className = 'childCheckBox';
                         s.innerText = classes[i][j];
+                        s.name = "student";
                         let l = document.createElement("label");
                         l.innerText = classes[i][j];
                         l.className = "childCheckBox";
@@ -1249,8 +1266,9 @@
         <h2 for="due-date">Choose a due date:</label>
 
         <input class="inputs" type="datetime-local" id="due-date"
-        name="due-date" value="2020-05-14T23:59"
-        min="2020-04-01T00:00" max="2021-01-01T00:00">
+        name="due-date" 
+        value="2020-05-14T23:59"
+        >
         <!-- <img src="complete.png" class='status' id="status4"> -->
     </div>
 
