@@ -26,7 +26,7 @@
                 if (this.readyState == 4 && this.status == 200) {
                    
                     classes=this.response.names;
-                    admins = this.response.admins;
+                    admins = this.response.adminNames;
                     for(i=0;i<classes.length;i++){
                     console.log(classes[0])
                     var table = document.getElementById('classes')
@@ -35,11 +35,13 @@
                     var cell2 = row.insertCell(1);
 
                     cell1.innerHTML = classes[i];
-                    cell2.innerHTML = admins[i];
-                    }
+                    name = admins[i];
+                    cell2.innerHTML = name.substring(0,1) + ". " + name.substring(name.indexOf(" ") + 1);
+                    
 
                     
                 }
+            }
         };
     
     
@@ -441,7 +443,7 @@
     <div class = "container">
         <!-- <button class = "button"><span>=</span></button> -->
         <div class="navbar">
-            <img src = "goodlogo.png" id = "logo">
+            <img src = "goodLogo.png" id = "logo">
             <a href="http://virajsule.me/joinclass.html"><b>Join Class</b></a>
             <a href="http://virajsule.me/studentassignments.html"><b>View Assignments</b></a>
          
@@ -451,8 +453,6 @@
           <a href = "http://virajsule.me/index.html" id = "lgOut"><b>Logout</b></a>
         </div>
     </div>
-
-
       
     <div class="block">
         <!-- <h1>Join a Class</h1> -->

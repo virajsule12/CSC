@@ -89,6 +89,17 @@ var defaultVal=''
                 let p = row.insertCell(4);
                 p.className = "cell";
                 p.innerText = progress[i];
+                switch(progress[i]) {
+                    case "Complete":
+                        p.style.color = "green";
+                        break;
+                    case "In Progress":
+                        p.style.color = "orange";
+                        break;
+                    case "Not Started":
+                        p.style.color = "red";
+                        break;
+                }
 
                 //admin
                 let ad = row.insertCell(5);
